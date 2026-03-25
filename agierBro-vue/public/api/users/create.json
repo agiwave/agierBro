@@ -1,0 +1,112 @@
+{
+  "username": "",
+  "email": "",
+  "phone": "",
+  "password": "",
+  "confirmPassword": "",
+  "role": "user",
+  "status": "active",
+  "bio": "",
+  "_schema": {
+    "type": "object",
+    "title": "创建用户",
+    "description": "请填写用户信息，带 * 的为必填项",
+    "groups": [
+      {
+        "key": "account",
+        "title": "账户信息",
+        "description": "设置用户的登录凭证",
+        "fields": ["username", "email", "password", "confirmPassword"]
+      },
+      {
+        "key": "profile",
+        "title": "个人资料",
+        "fields": ["phone", "role", "status", "bio"]
+      }
+    ],
+    "properties": {
+      "username": {
+        "type": "string",
+        "title": "用户名",
+        "required": true,
+        "minLength": 3,
+        "maxLength": 20,
+        "description": "3-20 个字符，只能包含字母、数字和下划线"
+      },
+      "email": {
+        "type": "string",
+        "title": "邮箱",
+        "required": true,
+        "format": "email",
+        "description": "请输入有效的邮箱地址"
+      },
+      "phone": {
+        "type": "string",
+        "title": "手机号",
+        "format": "phone",
+        "description": "请输入 11 位中国大陆手机号"
+      },
+      "password": {
+        "type": "string",
+        "title": "密码",
+        "required": true,
+        "minLength": 6,
+        "description": "至少 6 个字符"
+      },
+      "confirmPassword": {
+        "type": "string",
+        "title": "确认密码",
+        "required": true,
+        "description": "请再次输入密码"
+      },
+      "role": {
+        "type": "string",
+        "title": "角色",
+        "required": true,
+        "enum": [
+          { "value": "admin", "label": "管理员" },
+          { "value": "editor", "label": "编辑" },
+          { "value": "reviewer", "label": "评审" },
+          { "value": "user", "label": "普通用户" }
+        ]
+      },
+      "status": {
+        "type": "string",
+        "title": "状态",
+        "required": true,
+        "enum": [
+          { "value": "active", "label": "激活" },
+          { "value": "inactive", "label": "未激活" }
+        ]
+      },
+      "bio": {
+        "type": "string",
+        "title": "个人简介",
+        "maxLength": 500,
+        "description": "最多 500 字"
+      }
+    },
+    "tools": [
+      {
+        "name": "submit",
+        "description": "创建用户",
+        "protocol": "http",
+        "method": "POST",
+        "url": "/api/users",
+        "onSuccess": [
+          { "type": "message", "message": "用户创建成功", "level": "success" },
+          { "type": "navigate", "target": "/users" }
+        ],
+        "onError": [
+          { "type": "message", "message": "创建失败，请重试", "level": "error" }
+        ]
+      },
+      {
+        "name": "cancel",
+        "description": "取消",
+        "protocol": "navigate",
+        "target": "/users"
+      }
+    ]
+  }
+}

@@ -1,13 +1,13 @@
 <template>
   <div class="entry-page">
-    <Toast v-model="toast.visible" :message="toast.message" level="info" :duration="3000" />
-    
+    <GlobalToast />
+
     <!-- 加载状态 -->
     <div v-if="loading" class="loading-state">
       <div class="spinner"></div>
       <p>加载中...</p>
     </div>
-    
+
     <!-- 错误状态 -->
     <div v-else-if="error" class="error-state">
       <div class="error-icon">⚠️</div>
@@ -15,14 +15,14 @@
       <p>{{ error }}</p>
       <button class="btn-retry" @click="loadData">重试</button>
     </div>
-    
+
     <!-- 空状态 -->
     <div v-else-if="!data" class="empty-state">
       <div class="empty-icon">📭</div>
       <h2>暂无数据</h2>
       <p>API: {{ apiUrl }}</p>
     </div>
-    
+
     <!-- 数据加载成功 -->
     <div v-else class="content-wrapper">
       <!-- 后台首页：有 menu 字段的对象 -->
@@ -61,20 +61,18 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { Schema, DataObject, Tool, ToolResponse } from '@/types'
-import { extractSchema } from '@/services/api'
+import { extractSchema, fetchPageData } from '@/services/api'
 import { getUrlApiMapping } from '@/router'
+import { useAppStore } from '@/stores/app'
 import ListRenderer from '@/components/ListRenderer.vue'
 import SchemaRenderer from '@/components/SchemaRenderer.vue'
 import SectionList from '@/components/SectionList.vue'
 import DashboardLayout from '@/components/DashboardLayout.vue'
-import ToolButtons from '@/components/ToolButtons.vue'
-import Toast from '@/components/Toast.vue'
-import NavLayout from '@/components/NavLayout.vue'
-import TreeLayout from '@/components/TreeLayout.vue'
-import TabsLayout from '@/components/TabsLayout.vue'
+import GlobalToast from '@/components/GlobalToast.vue'
 
 const route = useRoute()
 const router = useRouter()
+const appStore = useAppStore()
 
 const loading = ref(true)
 const error = ref('')
@@ -82,7 +80,6 @@ const apiUrl = ref('')
 const schema = ref<Schema | null>(null)
 const data = ref<DataObject | null>(null)
 const formData = ref<DataObject>({})
-const toast = ref({ visible: false, message: '', level: 'info' })
 const mode = ref<'view' | 'edit'>('view')
 
 // 后台首页识别：有 menu 字段的对象（如 /editor, /reviewer）
@@ -115,6 +112,15 @@ function computeApiUrl(): string {
   return getUrlApiMapping(route.path)
 }
 
+/**
+ * 加载数据
+ *
+ * Server 驱动认证方案：
+ * - 未登录：Server 返回登录表单 Schema，App 自动渲染
+ * - 无权限：Server 返回 403 提示 Schema，App 自动渲染
+ * - 正常：Server 返回业务数据，App 自动渲染
+ * App 端不判断认证状态，只负责渲染 Server 返回的数据
+ */
 async function loadData() {
   loading.value = true
   error.value = ''
@@ -124,26 +130,23 @@ async function loadData() {
 
   try {
     apiUrl.value = computeApiUrl()
-    const result = await fetchPageDataByUrl(apiUrl.value)
+    const entity = route.path.replace(/^\//, '') || 'index'
+    const result = await fetchPageData(entity)
     data.value = result
     schema.value = extractSchema(result)
     formData.value = { ...result }
   } catch (e) {
+    // Server 返回 401/403 时也会返回数据（登录表单/权限提示）
+    // 只有网络错误等才会进入这里
     error.value = e instanceof Error ? e.message : '未知错误'
   } finally {
     loading.value = false
   }
 }
 
-async function fetchPageDataByUrl(url: string): Promise<DataObject> {
-  const response = await fetch(url)
-  if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText} (${url})`)
-  return response.json()
-}
-
 async function handleToolExecuted(result: ToolResponse) {
   console.log('Tool executed:', result)
-  
+
   // 处理 actions
   if (result.actions) {
     for (const action of result.actions) {
@@ -154,30 +157,22 @@ async function handleToolExecuted(result: ToolResponse) {
       } else if (action.type === 'back') {
         router.back()
       } else if (action.type === 'message') {
-        toast.value = {
-          visible: true,
-          message: action.message || '',
-          level: action.level || 'info'
-        }
+        appStore.showToast(action.message || '', action.level || 'info')
       }
     }
   }
-  
+
   // 向后兼容：处理旧字段
   if (result.navigateTo) router.push(result.navigateTo)
   if (result.reload) await loadData()
   if (result.message && !result.actions) {
-    toast.value = {
-      visible: true,
-      message: result.message,
-      level: result.success ? 'success' : 'error'
-    }
+    appStore.showToast(result.message, result.success ? 'success' : 'error')
   }
 }
 
 async function handleSubmit() {
   console.log('Submit:', formData.value)
-  toast.value = { visible: true, message: '保存成功', level: 'success' }
+  appStore.showSuccess('保存成功')
 }
 
 function handleItemClick(url: string) {

@@ -152,21 +152,118 @@ const { isRefreshing, handlers } = usePullToRefresh(loadData)
 
 ---
 
-## 九、企业级功能
+## 九、认证授权（Server 驱动）
 
-### 9.1 认证授权
+### 核心原则
 
-```typescript
-// 检查是否登录
-import { isAuthenticated } from '@/services/auth'
-if (isAuthenticated()) { ... }
+> **Server 负责：认证判断、权限控制、返回相应数据**
+> 
+> **App 负责：接收什么数据就渲染什么**
 
-// 权限指令
-<button v-permission="'admin'">仅管理员</button>
-<button v-permission="['admin', 'editor']" type="role">管理员或编辑</button>
+### 工作流程
+
+```
+用户访问 /editor
+    ↓
+App → GET /api/editor.json (自动携带 Token)
+    ↓
+Server 判断：
+├── 已登录 + 有权限 → 返回正常数据
+├── 未登录 → 返回登录表单 Schema
+└── 已登录 + 无权限 → 返回 403 提示 Schema
+    ↓
+App 自动渲染对应内容
 ```
 
-### 9.2 状态管理
+### Server 返回示例
+
+**未登录时访问受保护页面：**
+
+```json
+{
+  "username": "",
+  "password": "",
+  "_schema": {
+    "type": "object",
+    "title": "请先登录",
+    "tools": [{
+      "name": "login",
+      "description": "登录系统",
+      "protocol": "http",
+      "method": "POST",
+      "url": "/api/auth/login",
+      "onSuccess": [
+        { "type": "reload" }
+      ]
+    }]
+  }
+}
+```
+
+**无权限时：**
+
+```json
+{
+  "code": 403,
+  "message": "您没有权限访问此页面",
+  "suggestedAction": {
+    "title": "返回首页",
+    "url": "/"
+  },
+  "_schema": {
+    "type": "object",
+    "title": "无权限访问"
+  }
+}
+```
+
+**登录成功返回 Token：**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4...",
+  "message": "登录成功",
+  "_schema": {
+    "type": "object",
+    "tools": [{
+      "name": "continue",
+      "description": "继续",
+      "protocol": "navigate",
+      "target": "/"
+    }]
+  }
+}
+```
+
+### App 端 Token 管理
+
+App 端自动携带和保存 Token，无需判断认证状态：
+
+```typescript
+// 自动携带 Token（所有请求）
+Authorization: Bearer {token}
+
+// 登录成功后自动保存 Token
+{
+  "access_token": "...",
+  "refresh_token": "..."
+}
+```
+
+### 优势
+
+| 传统方案 | Server 驱动方案 |
+|---------|----------------|
+| App 端判断认证状态 | Server 完全控制 |
+| App 端路由守卫 | Server 返回什么渲染什么 |
+| 硬编码权限逻辑 | 完全通用，无业务耦合 |
+
+---
+
+## 十、状态管理
+
+### 10.1 应用状态
 
 ```typescript
 // 使用 Pinia
@@ -175,14 +272,14 @@ const appStore = useAppStore()
 appStore.showToast('操作成功', 'success')
 ```
 
-### 9.3 错误处理
+### 10.2 错误处理
 
 ```typescript
 import { handleError } from '@/services/errorHandler'
 handleError(new Error('操作失败'))
 ```
 
-### 9.4 国际化
+### 10.3 国际化
 
 ```vue
 <template>
@@ -198,7 +295,7 @@ setLocale('en-US') // 切换语言
 
 ---
 
-## 十、项目结构
+## 十一、项目结构
 
 ```
 agierBro/
@@ -215,12 +312,11 @@ agierBro/
 │   │   │   ├── useTheme.ts
 │   │   │   └── ...
 │   │   ├── services/
-│   │   │   ├── auth.ts           # 认证服务
+│   │   │   ├── auth.ts           # Token 管理（Server 驱动）
 │   │   │   ├── errorHandler.ts   # 错误处理
 │   │   │   └── dataSourceMapper.ts
 │   │   ├── stores/       # Pinia 状态
-│   │   │   ├── app.ts
-│   │   │   └── auth.ts
+│   │   │   └── app.ts
 │   │   ├── i18n/         # 国际化
 │   │   │   └── index.ts
 │   │   └── views/Entry.vue
@@ -254,13 +350,13 @@ agierBro/
 
 ## 十二、版本信息
 
-**当前版本:** 0.7.0
+**当前版本:** 0.8.0
 
 **最新版本特性:**
+- ✅ Server 驱动认证授权（App 端无业务逻辑）
 - ✅ 极简 URL 映射（仅 2 条规则）
 - ✅ 移动端完整适配
 - ✅ 触摸手势、下拉刷新
-- ✅ 认证授权（通用 JWT）
 - ✅ 状态管理（Pinia）
 - ✅ 错误处理增强
 - ✅ 国际化支持（zh-CN/en-US）

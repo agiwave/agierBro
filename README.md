@@ -45,6 +45,8 @@ Server → { data, _schema, _tools } → App → UI
 | 文档 | 说明 |
 |-----|------|
 | [**核心文档**](./docs/CORE.md) | 📘 快速开始、协议说明、使用指南 |
+| [**使用指南**](./docs/GUIDE.md) | 📖 完整使用指南、最佳实践 |
+| [**认证重构**](./docs/AUTH_REFACTOR.md) | 🔐 Server 驱动认证方案详解 |
 | [**Schema 规范**](./docs/specs/SCHEMA_SPEC.md) | 📝 Schema 格式定义 |
 | [**Tool 规范**](./docs/specs/TOOL_SPEC.md) | 🔧 Tool 协议定义 |
 | [**数据源映射**](./docs/DATA_SOURCE_MAPPER.md) | 🗺️ URL 映射规则 |
@@ -135,10 +137,15 @@ agierBro/
 
 ## 版本
 
-**当前版本:** 0.6.2
+**当前版本:** 0.9.0
 
 **最新版本特性:**
-- ✅ 极简 URL 映射（仅 2 条规则）
+- ✅ 企业级功能完善（错误边界、全局 Toast、状态管理）
+- ✅ API 服务增强（缓存、重试、超时）
+- ✅ 性能优化（虚拟滚动、图片懒加载）
+- ✅ Server 驱动认证授权（App 端无业务逻辑）
+- ✅ 完整的用户管理 CRUD 示例
+- ✅ 测试覆盖 29+ 用例
 - ✅ 移动端完整适配
 - ✅ 触摸手势、下拉刷新
 - ✅ 表单验证、文件上传、主题切换

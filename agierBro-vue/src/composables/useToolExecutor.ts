@@ -1,4 +1,5 @@
 import type { Tool, ToolResponse, Action, DataObject } from '@/types'
+import { getToken, saveToken } from '@/services/auth'
 
 export interface ToolExecuteContext {
   formData?: Record<string, any>
@@ -97,6 +98,11 @@ export function useToolExecutor() {
 
     const isSuccess = response.ok
 
+    // 保存 Token（如果响应中包含）
+    if (isSuccess && data) {
+      saveTokenFromResponse(data)
+    }
+
     // 根据成功/失败选择 actions
     const actions: Action[] = []
     if (isSuccess && tool.onSuccess) {
@@ -165,16 +171,23 @@ export function useToolExecutor() {
   }
 
   /**
-   * 获取认证头（预留）
+   * 获取认证头
    */
   function getAuthHeaders(): Record<string, string> {
-    // 预留认证逻辑
-    // 可以从 localStorage 获取 token
-    const token = localStorage.getItem('auth_token')
+    const token = getToken()
     if (token) {
       return { 'Authorization': `Bearer ${token}` }
     }
     return {}
+  }
+
+  /**
+   * 从响应中保存 Token（如果存在）
+   */
+  function saveTokenFromResponse(data: any) {
+    if (data?.access_token) {
+      saveToken(data.access_token, data.refresh_token)
+    }
   }
 
   /**

@@ -3,20 +3,19 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import { vTouch, vLongPress } from './directives/touch'
-import { vPermission } from './directives/permission'
 import { vLazy } from './directives/lazy'
-import { initAuth } from './services/auth'
+import { useAppStore } from './stores/app'
 
 const app = createApp(App)
 const pinia = createPinia()
 
-// 初始化认证
-initAuth()
+// 初始化应用状态
+const appStore = useAppStore(pinia)
+appStore.init()
 
 // 注册全局指令
 app.directive('touch', vTouch)
 app.directive('longpress', vLongPress)
-app.directive('permission', vPermission)
 app.directive('lazy', vLazy)
 
 app.use(pinia)
