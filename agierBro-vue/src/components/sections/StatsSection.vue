@@ -19,8 +19,8 @@ defineProps<{
 
 <style scoped>
 .section-stats {
-  background: #f5f5f7;
-  padding: 60px 24px;
+  background: var(--bg-color-secondary);
+  padding: var(--spacing-2xl) var(--spacing-lg);
 }
 
 .stats-grid {
@@ -28,7 +28,7 @@ defineProps<{
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 40px;
+  gap: var(--spacing-xl);
 }
 
 .stat-item {
@@ -38,19 +38,32 @@ defineProps<{
 .stat-number {
   font-size: 48px;
   font-weight: 700;
-  color: #1d1d1f;
-  margin-bottom: 8px;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-sm);
 }
 
 .stat-label {
-  font-size: 14px;
-  color: #86868b;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
 }
 
-@media (max-width: 768px) {
+/* 移动端优化 */
+@media (max-width: 576px) {
+  .section-stats {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    gap: var(--spacing-lg);
+  }
+
+  .stat-number {
+    font-size: 32px;
+  }
+
+  .stat-label {
+    font-size: var(--font-size-xs);
   }
 }
 </style>
