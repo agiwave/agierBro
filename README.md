@@ -20,7 +20,7 @@ npm run dev
 
 ## 核心思想
 
-**Server 职责：** 提供 数据 + 能力（Tools）  
+**Server 职责：** 提供数据 + 能力（Tools）
 **App 职责：** 理解 Schema + 识别语义 + 自主呈现
 
 ```
@@ -31,11 +31,21 @@ Server → { data, _schema, _tools } → App → UI
 
 ## 关键特性
 
-- ✨ **三层设计** - Builtin Schema → Semantic Type → Schema Structure
-- 🎯 **语义驱动** - 通过 semantic 类型选择渲染组件
-- 📋 **自动布局** - 根据字段数选择表格/卡片/按钮
-- 🔧 **Tool 机制** - 对齐 OpenAI Tool API
+### 核心能力
+
+- ✨ **Schema 驱动** - 数据自描述结构，前端自动渲染
+- 🎯 **语义类型** - 统一语义类型体系，决定渲染方式
+- 📋 **自动布局** - 根据字段数自动选择表格/卡片/按钮布局
+- 🔧 **Tool 机制** - 支持 HTTP/Navigate 协议的操作定义
 - 🧩 **通用组件** - 无业务耦合，完全复用
+
+### 增强功能（v0.6.0）
+
+- 📝 **表单验证** - 必填/长度/范围/格式/正则等多种验证
+- 📎 **文件上传** - 拖拽上传、多文件、进度显示、文件预览
+- 🔍 **列表增强** - 搜索、筛选、分页、排序、视图切换
+- 🎨 **主题切换** - 亮色/暗色主题、自定义主题色、系统跟随
+- 🗺️ **通用映射** - 可配置的前端 URL 到后端数据源映射
 
 ---
 
@@ -43,9 +53,12 @@ Server → { data, _schema, _tools } → App → UI
 
 | 文档 | 说明 |
 |-----|------|
-| [**设计文档**](./docs/DESIGN.md) | 📘 完整设计（统一语义类型，所有类型平级） |
-| [**语义类型规范**](./agierBro-vue/src/specs/SEMANTIC_TYPE.md) | 📝 统一语义类型定义 |
-| [**实施总结**](./docs/IMPLEMENTATION_SUMMARY.md) | ✅ 完整模拟网站实施成果 |
+| [**设计文档**](./docs/DESIGN.md) | 📘 完整设计文档 |
+| [**Schema 规范**](./docs/specs/SCHEMA_SPEC.md) | 📝 Schema 格式定义 |
+| [**Tool 规范**](./docs/specs/TOOL_SPEC.md) | 🔧 Tool 协议定义 |
+| [**语义类型**](./docs/specs/SCHEMA_SPEC.md#语义类型) | 🏷️ 统一语义类型体系 |
+| [**数据源映射器**](./docs/DATA_SOURCE_MAPPER.md) | 🗺️ URL 映射规则说明 |
+| [**更新日志**](./docs/CHANGELOG.md) | 📅 版本更新记录 |
 
 ---
 
@@ -75,30 +88,15 @@ Server → { data, _schema, _tools } → App → UI
     },
     "tools": [
       {
-        "type": "function",
-        "function": {
-          "name": "submit_order",
-          "description": "提交订单审核",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string" }
-            }
-          }
-        },
-        "execution": {
-          "protocol": "http",
-          "http": {
-            "method": "POST",
-            "url": "/api/orders/ORD-001/submit"
-          }
-        },
-        "response": {
-          "onSuccess": [
-            { "type": "message", "message": "提交成功", "level": "success" },
-            { "type": "navigate", "target": "/orders" }
-          ]
-        }
+        "name": "submit_order",
+        "description": "提交订单审核",
+        "protocol": "http",
+        "method": "POST",
+        "url": "/api/orders/ORD-001/submit",
+        "onSuccess": [
+          { "type": "message", "message": "提交成功", "level": "success" },
+          { "type": "navigate", "target": "/orders" }
+        ]
       }
     ]
   }
@@ -119,26 +117,87 @@ Server → { data, _schema, _tools } → App → UI
 
 ---
 
+## 语义类型
+
+AgierBro 使用统一的语义类型体系，所有类型平级，无特殊前缀：
+
+### 结构类型
+| 类型 | 说明 | 渲染组件 |
+|-----|------|---------|
+| `nav` | 导航栏 | NavLayout |
+| `tree` | 树形菜单 | TreeLayout |
+| `tabs` | 标签页 | TabsLayout |
+
+### 页面区块
+| 类型 | 说明 | 渲染组件 |
+|-----|------|---------|
+| `hero` | Hero 区域 | HeroSection |
+| `stats` | 统计数据 | StatsSection |
+| `features` | 功能列表 | FeaturesSection |
+| `cta` | 行动号召 | CtaSection |
+| `footer` | 页脚 | FooterSection |
+| `content` | 内容区块 | ContentSection |
+| `list` | 列表区块 | ListSection |
+
+### 字段语义
+| 类型 | 说明 | 渲染优化 |
+|-----|------|---------|
+| `email` | 邮箱 | 邮件链接 |
+| `phone` | 电话 | 电话链接 |
+| `url` | 链接 | 超链接 |
+| `image` | 图片 | 图片显示 |
+| `file` | 文件 | 文件下载 |
+| `status` | 状态 | 状态标签 |
+| `amount` | 金额 | 货币格式化 |
+| `date` | 日期 | 日期格式化 |
+
+完整类型定义见：[Schema 规范](./docs/specs/SCHEMA_SPEC.md#语义类型)
+
+---
+
 ## 项目结构
 
 ```
 agierBro/
-├── agierBro-vue/           # Vue 参考实现
+├── agierBro-vue/               # Vue 参考实现
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── ListRenderer.vue     # 统一列表渲染
-│   │   │   ├── SchemaRenderer.vue   # 统一详情/表单
-│   │   │   ├── SectionRenderer.vue  # Section 渲染
-│   │   │   └── sections/            # 语义 Section 组件
-│   │   └── views/
-│   │       └── Entry.vue            # 统一入口
-│   └── public/api/       # 静态 API 数据
-├── docs/                 # 文档
-│   ├── DESIGN.md                # 设计文档（主）
-│   ├── SEMANTIC_TYPE_DESIGN.md  # 语义类型设计
-│   ├── IMPLEMENTATION_PLAN.md   # 实施计划
+│   │   ├── components/         # 组件
+│   │   │   ├── sections/       # 语义 Section 组件
+│   │   │   │   ├── HeroSection.vue
+│   │   │   │   ├── StatsSection.vue
+│   │   │   │   ├── ContentSection.vue
+│   │   │   │   ├── ListSection.vue
+│   │   │   │   └── ...
+│   │   │   ├── FileUploader.vue    # 文件上传
+│   │   │   ├── ListEnhanced.vue    # 增强列表
+│   │   │   ├── SchemaRenderer.vue  # Schema 渲染器
+│   │   │   ├── ObjectForm.vue      # 表单组件
+│   │   │   ├── ThemeSwitcher.vue   # 主题切换
+│   │   │   └── ...
+│   │   ├── composables/        # 组合式函数
+│   │   │   ├── useFormValidator.ts   # 表单验证
+│   │   │   ├── useTheme.ts         # 主题管理
+│   │   │   ├── useToolExecutor.ts  # Tool 执行
+│   │   │   └── ...
+│   │   ├── services/           # 服务
+│   │   │   ├── api.ts                # API 服务
+│   │   │   ├── dataSourceMapper.ts   # 数据源映射器
+│   │   │   └── ...
+│   │   ├── types/            # 类型定义
+│   │   ├── views/            # 视图
+│   │   │   └── Entry.vue           # 统一入口
+│   │   └── router/           # 路由配置
+│   ├── public/api/           # 静态 API 数据（示例）
+│   └── package.json
+├── docs/                     # 文档
+│   ├── specs/                # 规范文档
+│   │   ├── SCHEMA_SPEC.md    # Schema 规范
+│   │   └── TOOL_SPEC.md      # Tool 规范
+│   ├── DESIGN.md             # 设计文档
+│   ├── DATA_SOURCE_MAPPER.md # 数据源映射器
+│   ├── CHANGELOG.md          # 更新日志
 │   └── ...
-└── README.md             # 本文件
+└── README.md                 # 本文件
 ```
 
 ---
@@ -147,64 +206,95 @@ agierBro/
 
 ### 1. 快速入门
 
-1. 运行项目，查看示例页面
-2. 阅读 [设计文档](./docs/DESIGN.md)
-3. 修改 `public/api/` 下的示例数据
+```bash
+# 1. 运行项目
+cd agierBro-vue
+npm install
+npm run dev
+
+# 2. 访问示例页面
+# http://localhost:3000
+
+# 3. 修改示例数据
+# 编辑 public/api/ 下的 JSON 文件
+```
 
 ### 2. 理解协议
 
-1. 学习三层设计（Builtin → Semantic → Schema）
-2. 理解 Semantic Type 的作用
-3. 掌握 Tool 定义和执行
+1. 阅读 [Schema 规范](./docs/specs/SCHEMA_SPEC.md) - 理解数据格式
+2. 阅读 [Tool 规范](./docs/specs/TOOL_SPEC.md) - 理解操作定义
+3. 理解 [语义类型](./docs/specs/SCHEMA_SPEC.md#语义类型) - 理解渲染选择
 
 ### 3. 开发应用
 
-1. 参考 [实施计划](./docs/IMPLEMENTATION_PLAN.md)
-2. 实现用户认证、文件上传等功能
-3. 开发完整的业务系统
+1. 定义后端 API 返回的数据和 Schema
+2. 配置 [数据源映射规则](./docs/DATA_SOURCE_MAPPER.md)
+3. 使用内置组件自动渲染
+4. 根据需要扩展组件和验证规则
 
 ---
 
 ## 核心设计
 
-### 三层架构
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 1: Builtin Schema (特殊交互)                          │
-│ @nav, @tree, @tabs - 前端特殊处理                           │
-└─────────────────────────────────────────────────────────────┘
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 2: Semantic Type (渲染提示)                           │
-│ hero, stats, features, cta, footer - 选择 Section 组件       │
-└─────────────────────────────────────────────────────────────┘
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 3: Schema Structure (结构定义)                        │
-│ type, properties - 通用 SchemaRenderer 渲染                  │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 渲染决策
+### 渲染决策树
 
 ```
 数据加载
     ↓
-判断 _schema 是否为内置类型
-    ├── @nav → NavLayout
-    ├── @tree → TreeLayout
-    ├── @tabs → TabsLayout
-    └── object → 继续判断
-        ↓
-    查看 semantic 类型
-        ├── hero → HeroSection
-        ├── stats → StatsSection
-        ├── features → FeaturesSection
-        ├── cta → CtaSection
-        ├── footer → FooterSection
-        └── 无/其他 → SectionBlock (通用渲染)
+获取 semantic 类型
+    ↓
+nav ──────→ NavLayout
+tree ─────→ TreeLayout
+tabs ─────→ TabsLayout
+hero ─────→ HeroSection
+stats ────→ StatsSection
+features ─→ FeaturesSection
+cta ──────→ CtaSection
+footer ───→ FooterSection
+content ──→ ContentSection
+list ─────→ ListSection
+无/其他 ──→ SectionBlock (通用渲染)
 ```
+
+### 列表自动布局
+
+对于列表数据，根据可见字段数自动选择布局：
+
+| 可见字段数 | 布局 | 组件 |
+|-----------|------|------|
+| 1 | 按钮布局 | ListRenderer |
+| 2-4 | 卡片布局 | ListRenderer |
+| > 4 | 表格布局 | ListRenderer |
+
+### URL 映射规则
+
+默认的前端 URL 到后端数据源映射规则：
+
+| 前端 URL | 后端数据源 |
+|---------|-----------|
+| `/` | `/api/index.json` |
+| `/:entity` | `/api/:entity/index.json` |
+| `/:entity/:sub` | `/api/:entity/:sub/index.json` |
+| `/:entity/:sub/:id` | `/api/:entity/:sub/:id.json` |
+| `/test/:page` | `/api/test/:page.json` |
+| `/actions/:action` | `/api/actions/:action.json` |
+
+详见：[数据源映射器文档](./docs/DATA_SOURCE_MAPPER.md)
+
+---
+
+## 版本信息
+
+**当前版本:** 0.6.0
+
+**最新版本特性:**
+- ✅ 表单验证机制
+- ✅ 文件上传支持
+- ✅ 列表增强（搜索/筛选/分页）
+- ✅ 主题切换（亮色/暗色）
+- ✅ 通用数据源映射器
+
+详见：[更新日志](./docs/CHANGELOG.md)
 
 ---
 

@@ -1,44 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { mapToDataSource } from '@/services/dataSourceMapper'
 
 /**
- * URL 到 API 的映射规则
- * 
- * 规则：
+ * 前端 URL → 后端数据源地址 映射
+ *
+ * 极简规则（只有两条）：
  * 1. / → /api/index.json
- * 2. /:entity → /api/:entity/index.json
- * 3. /:entity/:sub → /api/:entity/:sub/index.json
- * 4. /:entity/:sub/:id → /api/:entity/:sub/:id.json
+ * 2. /xxx → /api/xxx.json（无论多少级）
+ *
+ * 示例：
+ * - /                    → /api/index.json
+ * - /users               → /api/users.json
+ * - /users/001           → /api/users/001.json
+ * - /editor/papers       → /api/editor/papers.json
+ * - /editor/papers/001   → /api/editor/papers/001.json
  */
 function getUrlApiMapping(path: string): string {
-  const cleanPath = path.split('?')[0]
-
-  if (cleanPath === '/' || cleanPath === '') {
-    return '/api/index.json'
-  }
-
-  const segments = cleanPath.split('/').filter(Boolean)
-  
-  if (segments.length === 0) {
-    return '/api/index.json'
-  }
-  
-  const first = segments[0]
-  if (first.startsWith('@') || first === 'src' || first === 'node_modules') {
-    return ''
-  }
-
-  // /:entity → /api/:entity/index.json
-  if (segments.length === 1) {
-    return `/api/${first}/index.json`
-  }
-  
-  // /:entity/:sub → /api/:entity/:sub/index.json
-  if (segments.length === 2) {
-    return `/api/${segments[0]}/${segments[1]}/index.json`
-  }
-  
-  // /:entity/:sub/:id → /api/:entity/:sub/:id.json
-  return `/api/${segments.join('/')}.json`
+  return mapToDataSource(path)
 }
 
 const router = createRouter({

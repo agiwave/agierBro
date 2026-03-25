@@ -29,14 +29,14 @@ defineProps<{
 
 <style scoped>
 .section-hero {
-  min-height: 60vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
   text-align: center;
-  padding: 60px 24px;
+  padding: 80px 24px;
 }
 
 .hero-content {

@@ -1,0 +1,87 @@
+{
+  "_schema": {
+    "type": "object",
+    "semantic": "list"
+  },
+  "icon": "📢",
+  "title": "系统通知",
+  "subtitle": "查看最新的通知和公告",
+  "items": [
+    {
+      "id": "notice-001",
+      "title": "系统维护通知",
+      "description": "系统将于本周末进行例行维护，届时部分功能可能暂时不可用。",
+      "icon": "🔧",
+      "clickable": true,
+      "meta": {
+        "date": "2026-03-25",
+        "status": { "label": "进行中", "color": "warning" }
+      },
+      "tags": [
+        { "label": "公告", "color": "primary" },
+        { "label": "重要", "color": "error" }
+      ]
+    },
+    {
+      "id": "notice-002",
+      "title": "新功能上线：文件上传",
+      "description": "现在支持在表单中上传文件，支持拖拽上传、多文件上传、进度显示等功能。",
+      "icon": "🚀",
+      "clickable": true,
+      "meta": {
+        "date": "2026-03-24",
+        "status": { "label": "已完成", "color": "success" }
+      },
+      "tags": [
+        { "label": "功能", "color": "success" }
+      ]
+    },
+    {
+      "id": "notice-003",
+      "title": "主题切换功能",
+      "description": "新增亮色/暗色主题切换，支持系统主题跟随，支持自定义主题色。",
+      "icon": "🎨",
+      "clickable": true,
+      "meta": {
+        "date": "2026-03-24",
+        "status": { "label": "已完成", "color": "success" }
+      },
+      "tags": [
+        { "label": "功能", "color": "success" },
+        { "label": "UI", "color": "primary" }
+      ]
+    },
+    {
+      "id": "notice-004",
+      "title": "表单验证增强",
+      "description": "新增表单验证机制，支持必填、长度、范围、格式等多种验证方式。",
+      "icon": "✅",
+      "clickable": true,
+      "meta": {
+        "date": "2026-03-24",
+        "status": { "label": "已完成", "color": "success" }
+      },
+      "tags": [
+        { "label": "功能", "color": "success" }
+      ]
+    },
+    {
+      "id": "notice-005",
+      "title": "列表增强功能",
+      "description": "列表组件新增搜索、筛选、分页、排序等功能，支持表格/卡片视图切换。",
+      "icon": "📊",
+      "clickable": true,
+      "meta": {
+        "date": "2026-03-24",
+        "status": { "label": "已完成", "color": "success" }
+      },
+      "tags": [
+        { "label": "功能", "color": "success" }
+      ]
+    }
+  ],
+  "hasMore": true,
+  "loadMoreText": "加载更多通知",
+  "emptyText": "暂无通知",
+  "emptyIcon": "📭"
+}

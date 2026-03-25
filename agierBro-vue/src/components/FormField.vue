@@ -19,6 +19,18 @@
       </div>
       <button type="button" class="btn-add-item" @click="addItem">+ 添加</button>
     </div>
+    <!-- 文件上传 -->
+    <FileUploader
+      v-else-if="field.field.type === 'file'"
+      :modelValue="field.value"
+      :accept="(field.field as any).accept"
+      :maxSize="(field.field as any).maxSize"
+      :maxFiles="(field.field as any).maxFiles"
+      :uploadUrl="(field.field as any).uploadUrl"
+      :downloadUrl="(field.field as any).downloadUrl"
+      :error="error"
+      @update:modelValue="(val) => emit('update', val)"
+    />
     <select v-else-if="field.field.enum" :value="field.value" class="field-input" @change="handleSelect($event)">
       <option value="">请选择</option>
       <option v-for="opt in field.field.enum" :key="opt.value" :value="opt.value" :disabled="opt.disabled">{{ opt.label }}</option>
@@ -43,19 +55,28 @@
       :placeholder="field.field.description"
       @input="handleInput($event)"
     />
-    <span v-if="error" class="field-error">{{ error }}</span>
+    <span v-if="error && field.field.type !== 'file'" class="field-error">{{ error }}</span>
   </div>
 </template>
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Field } from '@/types'
-import type { ParsedField } from '@/composables/useSchemaParser'
+import FileUploader from './FileUploader.vue'
+
+interface ParsedField {
+  key: string
+  field: Field
+  value: any
+}
+
 const props = defineProps<{ field: ParsedField; value: any; error?: string }>()
 const emit = defineEmits<{ update: [value: any] }>()
+
 function formatLabel(key: string, field?: Field): string {
   if (field?.title) return field.title
   return key.replace(/_/g, ' ')
 }
+
 function getInputType(): string {
   const f = props.field.field
   if (f.format === 'email') return 'email'
@@ -63,25 +84,34 @@ function getInputType(): string {
   if (f.format === 'date-time') return 'datetime-local'
   return 'text'
 }
+
 function formatValue(value: any, items?: Field): string {
   if (value == null) return ''
-  if (items?.enum) { const item = items.enum.find(e => e.value === value); return item ? item.label : String(value) }
+  if (items?.enum) {
+    const item = items.enum.find(e => e.value === value)
+    return item ? item.label : String(value)
+  }
   return String(value)
 }
+
 function handleInput(event: Event) {
   const target = event.target as HTMLInputElement
   emit('update', target.value)
 }
+
 function handleSelect(event: Event) {
   const t = event.target as HTMLSelectElement
   emit('update', t.value === '' ? null : (props.field.field.type === 'number' ? Number(t.value) : t.value))
 }
+
 function handleCheckbox(event: Event) {
   emit('update', (event.target as HTMLInputElement).checked)
 }
+
 function updateNestedField(key: string, value: any) {
   emit('update', { ...(props.field.value || {}), [key]: value })
 }
+
 function addItem() {
   emit('update', [...(props.field.value || []), props.field.field.items?.default ?? ''])
 }

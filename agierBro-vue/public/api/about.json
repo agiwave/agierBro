@@ -1,0 +1,110 @@
+{
+  "title": "关于 AgierBro",
+  "items": [
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "nav"
+      },
+      "icon": "📖",
+      "title": "AgierBro",
+      "links": [
+        { "title": "首页", "url": "/" },
+        { "title": "关于", "url": "/about" },
+        { "title": "认证", "url": "/auth" }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "content"
+      },
+      "icon": "🚀",
+      "title": "关于 AgierBro",
+      "subtitle": "数据驱动的通用 App 引擎",
+      "content": [
+        "AgierBro 是一个创新的前端架构模式，采用数据驱动的设计理念。",
+        "Server 负责提供数据和能力（Tools），App 负责理解 Schema、识别语义并自主呈现。",
+        "这种设计使得前端组件完全无业务耦合，所有行为由 Schema 定义，易于扩展和维护。"
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "features"
+      },
+      "title": "核心设计理念",
+      "items": [
+        {
+          "icon": "📋",
+          "title": "Schema 驱动",
+          "description": "数据自描述结构，前端自动渲染，无需手动编写 UI 代码"
+        },
+        {
+          "icon": "🎯",
+          "title": "语义类型",
+          "description": "统一语义类型体系，根据语义自动选择渲染组件"
+        },
+        {
+          "icon": "🧩",
+          "title": "通用组件",
+          "description": "无业务耦合，完全复用，一套组件适用于所有场景"
+        },
+        {
+          "icon": "🔧",
+          "title": "Tool 机制",
+          "description": "声明式操作定义，支持 HTTP/Navigate 协议，自动执行反馈"
+        }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "content"
+      },
+      "icon": "🏗️",
+      "title": "架构设计",
+      "subtitle": "Server 关注数据和功能，App 专注呈现机制",
+      "html": "<p><strong>Server 职责：</strong></p><ul><li>提供业务数据</li><li>提供能力（Tools）</li><li>定义数据 Schema</li></ul><p><strong>App 职责：</strong></p><ul><li>理解 Schema</li><li>识别语义</li><li>自主呈现</li></ul>",
+      "media": {
+        "type": "image",
+        "url": "https://via.placeholder.com/800x400/667eea/ffffff?text=AgierBro+Architecture",
+        "alt": "AgierBro 架构图"
+      }
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "cta"
+      },
+      "title": "开始使用",
+      "description": "立即体验数据驱动的 UI 开发方式",
+      "actions": [
+        { "title": "登录系统", "url": "/auth/login", "variant": "primary" },
+        { "title": "注册账号", "url": "/auth/register", "variant": "secondary" }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "footer"
+      },
+      "text": "© 2026 AgierBro. MIT License.",
+      "links": [
+        { "title": "GitHub", "url": "https://github.com" },
+        { "title": "文档", "url": "/about" }
+      ]
+    }
+  ],
+  "_schema": {
+    "type": "object",
+    "title": "关于",
+    "properties": {
+      "title": { "type": "string", "title": "标题" },
+      "items": {
+        "type": "array",
+        "title": "页面区块"
+      }
+    }
+  }
+}

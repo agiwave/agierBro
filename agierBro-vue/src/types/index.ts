@@ -74,6 +74,17 @@ export type FieldType =
   | 'date-time'
   | 'object'
   | 'array'
+  | 'file'  // 文件类型
+
+// 文件字段扩展
+export interface FileField extends Field {
+  type: 'file'
+  accept?: string        // 接受的文件类型
+  maxSize?: number       // 最大文件大小（字节）
+  maxFiles?: number      // 最大文件数量
+  uploadUrl?: string     // 上传地址
+  downloadUrl?: string   // 下载基础 URL
+}
 
 // ========== Schema 引用 ==========
 // 支持两种格式：

@@ -17,7 +17,7 @@ defineProps<{
 
 <style scoped>
 .section-list {
-  min-height: 100vh;
+  width: 100%;
 }
 
 .section-item {

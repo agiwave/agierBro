@@ -1,18 +1,20 @@
 {
+  "title": "AgierBro - 数据驱动的通用 App 引擎",
   "items": [
     {
       "_schema": {
         "type": "object",
         "semantic": "nav"
       },
-      "icon": "📑",
-      "title": "论文评审系统",
+      "icon": "🏠",
+      "title": "AgierBro",
       "links": [
         { "title": "首页", "url": "/" },
+        { "title": "关于", "url": "/about" },
+        { "title": "认证", "url": "/auth" },
         { "title": "编辑后台", "url": "/editor" },
         { "title": "专家后台", "url": "/reviewer" },
-        { "title": "通知", "url": "/notifications" },
-        { "title": "登录", "url": "/auth/login" }
+        { "title": "测试", "url": "/test" }
       ]
     },
     {
@@ -20,13 +22,13 @@
         "type": "object",
         "semantic": "hero"
       },
-      "icon": "🎓",
-      "title": "论文评审系统",
-      "subtitle": "高效、专业、智能的学术评审平台",
-      "description": "连接编辑与评审专家，简化论文评审流程，提升学术出版效率",
+      "icon": "🚀",
+      "title": "AgierBro",
+      "subtitle": "数据驱动的通用 App 引擎",
+      "description": "Server 关注数据和功能，App 专注呈现机制",
       "actions": [
-        { "title": "立即登录", "url": "/auth/login", "variant": "primary" },
-        { "title": "免费注册", "url": "/auth/register", "variant": "secondary" }
+        { "title": "开始使用", "url": "/auth/login", "variant": "primary" },
+        { "title": "查看文档", "url": "/about", "variant": "secondary" }
       ]
     },
     {
@@ -34,11 +36,12 @@
         "type": "object",
         "semantic": "stats"
       },
+      "title": "快速统计",
       "items": [
-        { "number": "10,000+", "label": "注册论文" },
-        { "number": "500+", "label": "评审专家" },
-        { "number": "98%", "label": "按时完成率" },
-        { "number": "24/7", "label": "系统可用性" }
+        { "number": "10+", "label": "语义类型" },
+        { "number": "20+", "label": "通用组件" },
+        { "number": "100%", "label": "Schema 驱动" },
+        { "number": "0", "label": "业务耦合" }
       ]
     },
     {
@@ -46,12 +49,55 @@
         "type": "object",
         "semantic": "features"
       },
-      "title": "核心功能",
+      "title": "核心特性",
       "items": [
-        { "icon": "📄", "title": "论文管理", "description": "便捷的论文提交、跟踪和管理系统", "link": "/editor" },
-        { "icon": "📋", "title": "智能评审", "description": "自动分配评审任务，实时跟踪评审进度", "link": "/reviewer/tasks" },
-        { "icon": "👥", "title": "专家库管理", "description": "汇聚各领域专家学者，建立专业评审团队", "link": "/auth/register" },
-        { "icon": "📊", "title": "数据分析", "description": "可视化评审数据统计，为决策提供科学依据", "link": "/editor/stats" }
+        {
+          "icon": "📋",
+          "title": "Schema 驱动",
+          "description": "数据自描述结构，前端自动渲染"
+        },
+        {
+          "icon": "🎯",
+          "title": "语义类型",
+          "description": "统一语义类型体系，决定渲染方式"
+        },
+        {
+          "icon": "🧩",
+          "title": "通用组件",
+          "description": "无业务耦合，完全复用"
+        },
+        {
+          "icon": "🔧",
+          "title": "Tool 机制",
+          "description": "支持 HTTP/Navigate 协议的操作定义"
+        },
+        {
+          "icon": "📝",
+          "title": "表单验证",
+          "description": "必填/长度/范围/格式等多种验证"
+        },
+        {
+          "icon": "🎨",
+          "title": "主题切换",
+          "description": "亮色/暗色主题、自定义主题色"
+        }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "content"
+      },
+      "icon": "📖",
+      "title": "设计理念",
+      "subtitle": "Server 关注数据和功能，App 专注呈现机制",
+      "content": [
+        "AgierBro 是一个创新的前端架构模式，采用数据驱动的设计理念。",
+        "Server 负责提供数据和能力（Tools），App 负责理解 Schema、识别语义并自主呈现。",
+        "这种设计使得前端组件完全无业务耦合，所有行为由 Schema 定义，易于扩展和维护。"
+      ],
+      "actions": [
+        { "title": "查看文档", "url": "/about", "variant": "primary" }
       ]
     },
     {
@@ -59,10 +105,11 @@
         "type": "object",
         "semantic": "cta"
       },
-      "title": "准备好开始了吗？",
-      "description": "立即注册，体验高效的论文评审流程",
+      "title": "准备开始？",
+      "description": "立即体验数据驱动的 UI 开发方式",
       "actions": [
-        { "title": "免费注册", "url": "/auth/register", "variant": "primary" }
+        { "title": "登录系统", "url": "/auth/login", "variant": "primary" },
+        { "title": "注册账号", "url": "/auth/register", "variant": "secondary" }
       ]
     },
     {
@@ -70,11 +117,10 @@
         "type": "object",
         "semantic": "footer"
       },
-      "copyright": "© 2024 论文评审系统。All rights reserved.",
+      "text": "© 2026 AgierBro. MIT License.",
       "links": [
-        { "title": "关于我们", "url": "/about" },
-        { "title": "联系方式", "url": "/contact" },
-        { "title": "隐私政策", "url": "/privacy" }
+        { "title": "GitHub", "url": "https://github.com" },
+        { "title": "文档", "url": "/about" }
       ]
     }
   ],
@@ -82,12 +128,10 @@
     "type": "object",
     "title": "首页",
     "properties": {
+      "title": { "type": "string", "title": "标题" },
       "items": {
         "type": "array",
-        "title": "页面区块",
-        "items": {
-          "type": "object"
-        }
+        "title": "页面区块"
       }
     }
   }

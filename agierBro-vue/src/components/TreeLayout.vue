@@ -19,11 +19,12 @@
     <!-- 内容区域 -->
     <main class="tree-main">
       <div class="tree-content">
-        <!-- 列表数据（包含 items）→ 使用 ObjectList 渲染 -->
-        <ObjectList
+        <!-- 列表数据（包含 items）→ 使用 ListRenderer 渲染 -->
+        <ListRenderer
           v-if="contentData?.items"
           :schema="contentData._schema || {}"
           :data="contentData"
+          @itemClick="() => {}"
         />
         <!-- 对象数据 -->
         <div v-else-if="contentData" class="data-view">
@@ -41,7 +42,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { DataObject } from '@/types'
-import ObjectList from './ObjectList.vue'
+import ListRenderer from './ListRenderer.vue'
 import TreeNode from './TreeNode.vue'
 const props = defineProps<{ data: DataObject | null }>()
 const activeNode = ref<any>(null)

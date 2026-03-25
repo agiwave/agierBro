@@ -1,6 +1,26 @@
 <template>
   <div class="schema-renderer">
-    <div v-if="mode === 'view'" class="view-mode">
+    <!-- 表单模式：有 tools 且是表单类型页面 -->
+    <div v-if="isFormMode" class="form-mode">
+      <div v-if="schema.title" class="form-header">
+        <h2 class="form-title">{{ schema.title }}</h2>
+        <p v-if="schema.description" class="form-description">{{ schema.description }}</p>
+      </div>
+      <ObjectForm
+        :schema="schema"
+        :data="formData"
+        :showActions="false"
+        @update="handleUpdate"
+        @submit="handleFormSubmit"
+      />
+      <!-- Tools 操作按钮 -->
+      <div v-if="tools.length" class="tool-section">
+        <ToolButtons :tools="tools" :formData="formData" :currentData="data" @executed="handleToolExecuted" />
+      </div>
+    </div>
+    
+    <!-- 查看模式：分组渲染字段 -->
+    <div v-else class="view-mode">
       <!-- 查看模式：分组渲染字段 -->
       <div v-for="section in sections" :key="section.key" class="field-section">
         <div class="section-header" v-if="section.title">
@@ -45,21 +65,6 @@
         <ToolButtons :tools="tools" :currentData="data" @executed="handleToolExecuted" />
       </div>
     </div>
-    
-    <!-- 编辑模式 -->
-    <div v-else class="edit-mode">
-      <ObjectForm
-        :schema="schema"
-        :data="formData"
-        :showActions="false"
-        @update="handleUpdate"
-        @submit="handleSubmit"
-      />
-      <div class="form-actions">
-        <button class="btn btn-secondary" @click="handleReset">取消</button>
-        <button class="btn btn-primary" @click="handleSubmit">保存</button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -84,6 +89,15 @@ const emit = defineEmits<{
 
 const formData = ref<DataObject>({ ...props.data })
 const mode = ref<'view' | 'edit'>(props.mode || 'view')
+
+// 判断是否为表单模式：有 tools 且没有复杂数据（用于登录/注册等表单页面）
+const isFormMode = computed(() => {
+  const hasTools = tools.value.length > 0
+  const hasItems = props.data.items && Array.isArray(props.data.items)
+  const hasMenu = props.data.menu && Array.isArray(props.data.menu)
+  // 有 tools 且不是 Section 列表或 Dashboard，则是表单模式
+  return hasTools && !hasItems && !hasMenu
+})
 
 const sections = computed<FieldSection[]>(() => {
   return groupFields(props.schema, props.data)
@@ -142,6 +156,13 @@ function handleSubmit() {
   emit('submit', formData.value)
 }
 
+function handleFormSubmit() {
+  // 表单模式下的提交，触发第一个 tool
+  if (tools.value.length > 0) {
+    // 表单模式由 ToolButtons 处理工具执行
+  }
+}
+
 function handleReset() {
   formData.value = { ...props.data }
   mode.value = 'view'
@@ -160,6 +181,44 @@ defineExpose({
 <style scoped>
 .schema-renderer {
   width: 100%;
+}
+
+/* 表单模式 */
+.form-mode {
+  max-width: 500px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.form-title {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-description {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.tool-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e8e8e8;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /* 查看模式 */

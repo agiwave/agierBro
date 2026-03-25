@@ -69,16 +69,24 @@ function cancelConfirm() {
 
 async function executeTool(tool: Tool) {
   const args: Record<string, any> = {}
-  
+
   if (tool.parameters?.properties) {
     for (const key of Object.keys(tool.parameters.properties)) {
       if (props.formData?.[key] !== undefined) args[key] = props.formData[key]
       else if (props.currentData?.[key] !== undefined) args[key] = props.currentData[key]
     }
   }
-  
+
   const result = await execute(tool, args, { formData: props.formData, currentData: props.currentData })
-  const response: ToolResponse = JSON.parse(result.content || '{}')
+  const response: ToolResponse = {
+    success: result.success,
+    data: result.data,
+    message: result.message,
+    actions: result.actions,
+    error: result.error,
+    navigateTo: result.navigateTo,
+    reload: result.reload
+  }
   emit('executed', response)
 }
 </script>
