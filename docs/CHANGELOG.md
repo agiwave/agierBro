@@ -1,52 +1,59 @@
 # AgierBro 更新日志
 
+## v0.7.0 (2026-03-25)
+
+### 企业级功能
+
+#### 认证授权
+- `services/auth.ts` - 通用 JWT 认证服务
+- `directives/permission.ts` - 权限指令
+- `components/AuthLayout.vue` - 认证布局组件
+- `stores/auth.ts` - 认证状态管理
+
+#### 状态管理
+- `stores/app.ts` - 应用状态（loading/theme/toast）
+- `stores/auth.ts` - 认证状态
+- 集成 Pinia
+
+#### 错误处理
+- `services/errorHandler.ts` - 全局错误处理
+- `composables/useNetworkStatus.ts` - 网络状态检测
+- 支持指数退避重试
+
+#### 国际化
+- `i18n/index.ts` - 简易 i18n 支持
+- 支持语言：zh-CN, en-US
+- 翻译指令 `v-t`
+
+### 保持通用性
+- 不依赖特定后端
+- JWT Token 可配置
+- 认证/授权解耦
+
+---
+
+## v0.6.2 (2026-03-25)
+
+### 移动端适配
+- 全局响应式样式系统
+- 触摸手势指令
+- 底部导航组件
+- 下拉刷新功能
+- 汉堡菜单组件
+
+---
+
 ## v0.6.1 (2026-03-25)
 
 ### 核心改进
-
-#### 极简数据源映射规则
-- **规则**: `/` → `/api/index.json`，`/xxx` → `/api/xxx.json`
-- 移除复杂的模式匹配和优先级系统
-- 文件：`src/services/dataSourceMapper.ts`
-
-#### 工具调用表单支持
-- 自动检测有 tools 的表单页面（登录/注册等）
-- SchemaRenderer 新增表单模式
-- 集成表单验证和 Tool 执行
-
-### 新增组件
-
-| 组件 | 说明 |
-|-----|------|
-| `FileUploader.vue` | 文件上传（拖拽、多文件、进度） |
-| `ListEnhanced.vue` | 增强列表（搜索、筛选、分页） |
-| `ThemeSwitcher.vue` | 主题切换（亮色/暗色） |
-| `ContentSection.vue` | 内容区块渲染 |
-| `ListSection.vue` | 列表区块渲染 |
-
-### 新增 Composables
-
-| Composable | 说明 |
-|-----------|------|
-| `useFormValidator` | 表单验证（必填/长度/格式等） |
-| `useTheme` | 主题管理（持久化、系统跟随） |
-| `useToolExecutor` | Tool 执行（HTTP/Navigate 协议） |
-
-### 新增页面
-
-| 页面 | 路由 | 类型 |
-|-----|------|------|
-| 关于 | `/about` | 复合页面 |
-| 认证中心 | `/auth` | 复合页面 |
-| 登录 | `/auth/login` | 工具调用表单 |
-| 注册 | `/auth/register` | 工具调用表单 |
+- 极简数据源映射规则（仅 2 条）
+- 工具调用表单支持
+- 版本更新为 0.6.1
 
 ### 清理
-
 - 删除冗余组件（7 个）
 - 删除冗余 composables（3 个）
 - 删除冗余文档（5 个）
-- 简化 API 文件结构
 
 ---
 

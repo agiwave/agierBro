@@ -1,6 +1,6 @@
 # AgierBro 核心文档
 
-**版本:** v0.6.2
+**版本:** v0.7.0
 **日期:** 2026-03-25
 
 ---
@@ -152,7 +152,53 @@ const { isRefreshing, handlers } = usePullToRefresh(loadData)
 
 ---
 
-## 九、项目结构
+## 九、企业级功能
+
+### 9.1 认证授权
+
+```typescript
+// 检查是否登录
+import { isAuthenticated } from '@/services/auth'
+if (isAuthenticated()) { ... }
+
+// 权限指令
+<button v-permission="'admin'">仅管理员</button>
+<button v-permission="['admin', 'editor']" type="role">管理员或编辑</button>
+```
+
+### 9.2 状态管理
+
+```typescript
+// 使用 Pinia
+import { useAppStore } from '@/stores/app'
+const appStore = useAppStore()
+appStore.showToast('操作成功', 'success')
+```
+
+### 9.3 错误处理
+
+```typescript
+import { handleError } from '@/services/errorHandler'
+handleError(new Error('操作失败'))
+```
+
+### 9.4 国际化
+
+```vue
+<template>
+  <h1>{{ $t('auth.login') }}</h1>
+  <button v-t="'common.submit'">提交</button>
+</template>
+
+<script setup>
+import { t, setLocale } from '@/i18n'
+setLocale('en-US') // 切换语言
+</script>
+```
+
+---
+
+## 十、项目结构
 
 ```
 agierBro/
@@ -169,7 +215,14 @@ agierBro/
 │   │   │   ├── useTheme.ts
 │   │   │   └── ...
 │   │   ├── services/
+│   │   │   ├── auth.ts           # 认证服务
+│   │   │   ├── errorHandler.ts   # 错误处理
 │   │   │   └── dataSourceMapper.ts
+│   │   ├── stores/       # Pinia 状态
+│   │   │   ├── app.ts
+│   │   │   └── auth.ts
+│   │   ├── i18n/         # 国际化
+│   │   │   └── index.ts
 │   │   └── views/Entry.vue
 │   └── public/api/
 ├── docs/
@@ -182,7 +235,7 @@ agierBro/
 
 ---
 
-## 十、学习路径
+## 十一、学习路径
 
 ### 1. 快速入门
 1. 运行项目
@@ -199,22 +252,24 @@ agierBro/
 
 ---
 
-## 十一、版本信息
+## 十二、版本信息
 
-**当前版本:** 0.6.2
+**当前版本:** 0.7.0
 
 **最新版本特性:**
 - ✅ 极简 URL 映射（仅 2 条规则）
 - ✅ 移动端完整适配
-- ✅ 触摸手势支持
-- ✅ 下拉刷新
-- ✅ 表单验证、文件上传、主题切换
+- ✅ 触摸手势、下拉刷新
+- ✅ 认证授权（通用 JWT）
+- ✅ 状态管理（Pinia）
+- ✅ 错误处理增强
+- ✅ 国际化支持（zh-CN/en-US）
 
 详见：[CHANGELOG.md](./CHANGELOG.md)
 
 ---
 
-## 十二、相关文档
+## 十三、相关文档
 
 | 文档 | 说明 |
 |-----|------|
