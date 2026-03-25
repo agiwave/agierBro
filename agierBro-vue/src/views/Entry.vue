@@ -201,6 +201,7 @@ watch(() => route.fullPath, loadData)
   min-height: 100vh;
   gap: 16px;
   text-align: center;
+  padding: var(--spacing-lg);
 }
 
 .spinner {
@@ -221,31 +222,65 @@ watch(() => route.fullPath, loadData)
 }
 
 .error-state h2, .empty-state h2 {
-  color: #333;
+  color: var(--text-color);
   margin: 0;
 }
 
 .error-state p, .empty-state p {
-  color: #666;
+  color: var(--text-color-secondary);
   max-width: 600px;
 }
 
 .btn-retry {
-  padding: 10px 24px;
-  background: #1890ff;
+  padding: 12px 24px;
+  background: var(--primary-color);
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   cursor: pointer;
+  transition: background 0.2s;
+  min-height: 44px;
 }
 
 .btn-retry:hover {
-  background: #40a9ff;
+  background: var(--primary-hover);
 }
 
 .content-wrapper {
-  padding: 24px;
+  padding: var(--spacing-lg);
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* 移动端优化 */
+@media (max-width: 576px) {
+  .entry-page {
+    padding: var(--spacing-xs);
+  }
+
+  .loading-state, .error-state, .empty-state {
+    padding: var(--spacing-md);
+  }
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+  }
+
+  .error-icon, .empty-icon {
+    font-size: 36px;
+  }
+
+  .error-state h2, .empty-state h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .error-state p, .empty-state p {
+    font-size: var(--font-size-sm);
+  }
+
+  .content-wrapper {
+    padding: var(--spacing-xs);
+  }
 }
 </style>

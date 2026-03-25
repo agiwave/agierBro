@@ -1,0 +1,196 @@
+/**
+ * 全局响应式样式
+ * 
+ * 包含：
+ * - 响应式断点
+ * - 响应式字体
+ * - 响应式间距
+ * - 安全区域适配
+ * - 触摸优化
+ */
+
+/* ========== 响应式断点 ========== */
+:root {
+  /* 断点定义 */
+  --breakpoint-xs: 375px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+
+  /* 安全区域 (iPhone 刘海屏) */
+  --safe-area-top: env(safe-area-inset-top);
+  --safe-area-bottom: env(safe-area-inset-bottom);
+  --safe-area-left: env(safe-area-inset-left);
+  --safe-area-right: env(safe-area-inset-right);
+}
+
+/* ========== 响应式字体 ========== */
+:root {
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 32px;
+}
+
+@media (max-width: 576px) {
+  :root {
+    --font-size-xs: 11px;
+    --font-size-sm: 13px;
+    --font-size-md: 15px;
+    --font-size-lg: 17px;
+    --font-size-xl: 22px;
+  }
+}
+
+/* ========== 响应式间距 ========== */
+:root {
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+}
+
+@media (max-width: 576px) {
+  :root {
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+  }
+}
+
+/* ========== 全局触摸优化 ========== */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* 允许表单输入 */
+input,
+textarea,
+[contenteditable],
+select {
+  -webkit-user-select: auto;
+  user-select: auto;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 触摸反馈类 */
+.touch-feedback {
+  transition: transform 0.1s, opacity 0.1s, background-color 0.2s;
+  cursor: pointer;
+}
+
+.touch-feedback:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+/* ========== 安全区域适配 ========== */
+body {
+  padding-top: var(--safe-area-top);
+  padding-bottom: var(--safe-area-bottom);
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
+}
+
+/* ========== 响应式容器 ========== */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+}
+
+/* ========== 响应式图片 ========== */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========== 响应式表格 ========== */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ========== 点击区域优化 ========== */
+@media (max-width: 576px) {
+  button,
+  a,
+  input[type='button'],
+  input[type='submit'],
+  input[type='checkbox'],
+  input[type='radio'] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* 表单输入框优化 */
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
+  textarea,
+  select {
+    font-size: 16px; /* 防止 iOS 自动缩放 */
+    padding: 12px 16px;
+  }
+}
+
+/* ========== 隐藏滚动条但保留功能 ========== */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ========== 防止文本选择 ========== */
+.no-select {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ========== 强制文本换行 ========== */
+.text-break {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ========== 1px 边框 ========== */
+.hairline {
+  position: relative;
+}
+
+.hairline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border: 0.5px solid var(--border-color);
+  pointer-events: none;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .hairline::after {
+    border-width: 0.5px;
+  }
+}

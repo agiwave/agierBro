@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useTheme } from '@/composables/useTheme'
+import '@/styles/responsive.css'
 
 const { initTheme } = useTheme()
 
@@ -68,6 +69,7 @@ body {
   transition: background-color 0.3s, color 0.3s;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #app {
