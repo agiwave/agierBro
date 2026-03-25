@@ -360,4 +360,79 @@ defineExpose({
   gap: 12px;
   flex-wrap: wrap;
 }
+
+/* 移动端优化 */
+@media (max-width: 576px) {
+  .form-mode {
+    max-width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  .form-title {
+    font-size: 20px;
+  }
+
+  .form-description {
+    font-size: 13px;
+  }
+
+  .tool-section {
+    flex-direction: column;
+  }
+
+  .tool-section :deep(.btn) {
+    width: 100%;
+  }
+
+  .field-section {
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+
+  .section-header {
+    padding: 12px 16px;
+  }
+
+  .section-title {
+    font-size: 15px;
+  }
+
+  .section-description {
+    font-size: 12px;
+  }
+
+  .section-content {
+    padding: 16px;
+  }
+
+  .simple-fields-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .field-label {
+    font-size: 13px;
+  }
+
+  .field-value {
+    font-size: 14px;
+  }
+
+  .nested-object {
+    padding-left: 12px;
+    border-left-width: 1px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px 20px;
+    min-height: 44px;
+  }
+}
 </style>

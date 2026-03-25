@@ -126,10 +126,29 @@ defineExpose({
 <style scoped>
 .object-form { width: 100%; }
 .form-simple { display: flex; flex-direction: column; gap: 16px; }
-.form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; padding-top: 24px; border-top: 1px solid #e8e8e8; }
-.btn { padding: 10px 24px; border-radius: 4px; font-size: 14px; cursor: pointer; border: none; }
-.btn-primary { background: #1890ff; color: #fff; }
-.btn-primary:hover { background: #40a9ff; }
-.btn-secondary { background: #fff; color: #666; border: 1px solid #d9d9d9; }
-.btn-secondary:hover { border-color: #1890ff; color: #1890ff; }
+.form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+.btn { padding: 10px 24px; border-radius: var(--border-radius); font-size: var(--font-size-md); cursor: pointer; border: none; min-height: 44px; transition: all 0.2s; }
+.btn-primary { background: var(--primary-color); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-secondary { background: var(--bg-color-elevated); color: var(--text-color-secondary); border: 1px solid var(--border-color); }
+.btn-secondary:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+/* 移动端优化 */
+@media (max-width: 576px) {
+  .form-simple {
+    gap: 12px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}
 </style>

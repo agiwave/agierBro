@@ -253,4 +253,53 @@ function handleItemClick(item: DataObject) {
   color: #1890ff;
   background: #f5f5f5;
 }
+
+/* 移动端优化 */
+@media (max-width: 576px) {
+  .table {
+    font-size: 13px;
+  }
+
+  .table th, .table td {
+    padding: 10px 12px;
+  }
+
+  .table th {
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .list-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 14px;
+    border-radius: 8px;
+  }
+
+  .card-field {
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .card-label {
+    font-size: 11px;
+  }
+
+  .card-value {
+    font-size: 14px;
+  }
+
+  .list-buttons {
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 14px 18px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+}
 </style>
