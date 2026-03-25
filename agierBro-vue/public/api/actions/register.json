@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "message": "注册成功，请登录",
+  "user": { "id": "user-002", "username": "newuser", "email": "user@example.com" },
+  "_navigate": "/page/login",
+  "_reload": false,
+  "_message": "注册成功！请登录"
+}

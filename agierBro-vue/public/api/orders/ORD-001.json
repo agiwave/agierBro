@@ -1,0 +1,139 @@
+{
+  "id": "ORD-001",
+  "order_no": "ORD-20240324001",
+  "customer_name": "张三",
+  "customer_phone": "13800138000",
+  "customer_email": "zhangsan@example.com",
+  "status": "draft",
+  "total_amount": 180.00,
+  "discount_amount": 20.00,
+  "paid_amount": 160.00,
+  "created_at": "2024-03-24T10:00:00Z",
+  "updated_at": "2024-03-24T12:00:00Z",
+  "items": [
+    {
+      "product_id": "P001",
+      "product_name": "商品 A",
+      "quantity": 2,
+      "unit_price": 90.00
+    }
+  ],
+  "shipping_address": {
+    "province": "广东省",
+    "city": "深圳市",
+    "district": "南山区",
+    "detail": "南山区 xxx 路 xxx 号"
+  },
+  "_schema": {
+    "type": "object",
+    "title": "订单详情",
+    "description": "查看和编辑订单的详细信息",
+    "order": [
+      "id", "order_no", "customer_name", "customer_phone", "customer_email",
+      "status", "total_amount", "discount_amount", "paid_amount",
+      "created_at", "updated_at", "items", "shipping_address"
+    ],
+    "properties": {
+      "id": { "type": "string", "title": "订单 ID", "readOnly": true },
+      "order_no": { "type": "string", "title": "订单编号", "readOnly": true },
+      "customer_name": { "type": "string", "title": "客户姓名", "required": true },
+      "customer_phone": { "type": "string", "title": "客户电话", "format": "phone", "required": true },
+      "customer_email": { "type": "string", "title": "客户邮箱", "format": "email", "required": true },
+      "status": { 
+        "type": "string", 
+        "title": "订单状态",
+        "enum": [
+          { "value": "draft", "label": "草稿" },
+          { "value": "pending", "label": "待审核" },
+          { "value": "approved", "label": "已通过" },
+          { "value": "rejected", "label": "已拒绝" },
+          { "value": "cancelled", "label": "已取消" }
+        ]
+      },
+      "total_amount": { "type": "number", "title": "订单金额", "readOnly": true },
+      "discount_amount": { "type": "number", "title": "优惠金额", "readOnly": true },
+      "paid_amount": { "type": "number", "title": "已付金额", "readOnly": true },
+      "created_at": { "type": "string", "format": "date-time", "title": "创建时间", "readOnly": true },
+      "updated_at": { "type": "string", "format": "date-time", "title": "更新时间", "readOnly": true },
+      "items": { 
+        "type": "array", 
+        "title": "商品明细",
+        "items": {
+          "type": "object",
+          "properties": {
+            "product_id": { "type": "string", "title": "商品 ID" },
+            "product_name": { "type": "string", "title": "商品名称" },
+            "quantity": { "type": "integer", "title": "数量" },
+            "unit_price": { "type": "number", "title": "单价" }
+          }
+        }
+      },
+      "shipping_address": { 
+        "type": "object", 
+        "title": "收货地址",
+        "properties": {
+          "province": { "type": "string", "title": "省份" },
+          "city": { "type": "string", "title": "城市" },
+          "district": { "type": "string", "title": "区县" },
+          "detail": { "type": "string", "title": "详细地址" }
+        }
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "submit_order",
+          "description": "将订单提交到审核流程",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "description": "订单 ID" }
+            },
+            "required": ["id"]
+          }
+        },
+        "execution": {
+          "protocol": "http",
+          "http": {
+            "method": "POST",
+            "url": "/api/orders/ORD-001/submit"
+          }
+        },
+        "response": {
+          "onSuccess": [
+            { "type": "message", "message": "订单已提交", "level": "success" },
+            { "type": "navigate", "target": "/orders" }
+          ]
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "cancel_order",
+          "description": "取消当前订单",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "description": "订单 ID" }
+            },
+            "required": ["id"]
+          }
+        },
+        "execution": {
+          "protocol": "http",
+          "http": {
+            "method": "POST",
+            "url": "/api/orders/ORD-001/cancel"
+          }
+        },
+        "response": {
+          "onSuccess": [
+            { "type": "message", "message": "订单已取消", "level": "success" },
+            { "type": "navigate", "target": "/orders" }
+          ]
+        }
+      }
+    ]
+  }
+}

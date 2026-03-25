@@ -1,0 +1,110 @@
+{
+  "id": "review-001",
+  "paper_id": "paper-001",
+  "paper_title": "基于深度学习的图像识别研究",
+  "paper_author": "张三",
+  "paper_abstract": "本文提出了一种新的基于深度学习的图像识别方法。该方法结合了卷积神经网络（CNN）和注意力机制，能够有效提升图像识别的准确率和效率。通过在 ImageNet 数据集上的实验验证，我们的方法在 top-1 准确率上达到了 85.6%，相比基线模型提升了 3.2 个百分点。",
+  "paper_keywords": ["深度学习", "图像识别", "CNN", "注意力机制"],
+  "status": "pending",
+  "assigned_at": "2024-03-21T09:00:00Z",
+  "due_date": "2024-04-04T23:59:59Z",
+  "review_content": "",
+  "recommendation": "",
+  "confidential_comments": "",
+  "_schema": {
+    "type": "object",
+    "title": "论文评审",
+    "description": "请仔细阅读论文并填写评审意见",
+    "order": ["paper_title", "paper_author", "paper_abstract", "paper_keywords", "status", "due_date", "review_content", "recommendation", "confidential_comments"],
+    "properties": {
+      "id": { "type": "string", "title": "评审编号", "readOnly": true },
+      "paper_id": { "type": "string", "title": "论文 ID", "readOnly": true },
+      "paper_title": { "type": "string", "title": "论文标题", "readOnly": true },
+      "paper_author": { "type": "string", "title": "作者", "readOnly": true },
+      "paper_abstract": { "type": "string", "title": "摘要", "readOnly": true },
+      "paper_keywords": { "type": "array", "title": "关键词", "items": { "type": "string" }, "readOnly": true },
+      "status": {
+        "type": "string",
+        "title": "评审状态",
+        "enum": [
+          { "value": "pending", "label": "待评审" },
+          { "value": "submitted", "label": "已提交" }
+        ],
+        "readOnly": true
+      },
+      "assigned_at": { "type": "string", "format": "date-time", "title": "分配时间", "readOnly": true },
+      "due_date": { "type": "string", "format": "date-time", "title": "截止日期", "readOnly": true },
+      "review_content": {
+        "type": "string",
+        "title": "评审意见",
+        "required": true,
+        "description": "请详细说明论文的优缺点、创新性和不足"
+      },
+      "recommendation": {
+        "type": "string",
+        "title": "评审结论",
+        "enum": [
+          { "value": "accept", "label": "接收", "color": "green" },
+          { "value": "minor_revision", "label": "小修", "color": "blue" },
+          { "value": "major_revision", "label": "大修", "color": "orange" },
+          { "value": "reject", "label": "拒稿", "color": "red" }
+        ],
+        "required": true
+      },
+      "confidential_comments": {
+        "type": "string",
+        "title": "保密意见",
+        "description": "仅编辑可见（可选）"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "submit_review",
+          "description": "提交评审意见",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "review_content": { "type": "string" },
+              "recommendation": { "type": "string" },
+              "confidential_comments": { "type": "string" }
+            },
+            "required": ["review_content", "recommendation"]
+          }
+        },
+        "execution": {
+          "protocol": "http",
+          "http": {
+            "method": "POST",
+            "url": "/api/reviewer/reviews/review-001/submit"
+          }
+        },
+        "response": {
+          "onSuccess": [
+            { "type": "message", "message": "评审意见已提交", "level": "success" },
+            { "type": "navigate", "target": "/reviewer/tasks" }
+          ],
+          "onError": [
+            { "type": "message", "message": "提交失败", "level": "error" }
+          ]
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "download_paper",
+          "description": "下载论文",
+          "parameters": {}
+        },
+        "execution": {
+          "protocol": "http",
+          "http": {
+            "method": "GET",
+            "url": "/api/files/papers/paper-001.pdf"
+          }
+        }
+      }
+    ]
+  }
+}

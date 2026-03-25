@@ -1,0 +1,84 @@
+{
+  "items": [
+    {
+      "id": "notif-001",
+      "title": "新评审任务",
+      "content": "您有一篇新的论文需要评审：《基于深度学习的图像识别研究》",
+      "type": "task",
+      "read": false,
+      "created_at": "2024-03-21T09:00:00Z",
+      "link": "/reviewer/tasks"
+    },
+    {
+      "id": "notif-002",
+      "title": "评审截止日期提醒",
+      "content": "您评审的《联邦学习中的隐私保护技术研究》将于 14 天后截止",
+      "type": "reminder",
+      "read": false,
+      "created_at": "2024-03-23T09:00:00Z",
+      "link": "/reviewer/reviews/review-002"
+    },
+    {
+      "id": "notif-003",
+      "title": "评审意见已接收",
+      "content": "您提交的《自然语言处理中的注意力机制研究》评审意见已被接收",
+      "type": "system",
+      "read": true,
+      "created_at": "2024-03-20T15:30:00Z",
+      "link": "/reviewer/reviews/review-003"
+    },
+    {
+      "id": "notif-004",
+      "title": "系统维护通知",
+      "content": "系统将于本周末（3 月 30 日 -31 日）进行维护升级，届时可能无法访问",
+      "type": "system",
+      "read": true,
+      "created_at": "2024-03-20T09:00:00Z",
+      "link": null
+    }
+  ],
+  "_schema": {
+    "type": "object",
+    "title": "我的通知",
+    "properties": {
+      "items": {
+        "type": "array",
+        "title": "通知列表",
+        "items": {
+          "type": "object",
+          "_address": "/notifications/{id}.json",
+          "properties": {
+            "id": { "type": "string", "title": "编号" },
+            "title": { "type": "string", "title": "标题" },
+            "content": { "type": "string", "title": "内容" },
+            "type": {
+              "type": "string",
+              "title": "类型",
+              "enum": [
+                { "value": "task", "label": "任务" },
+                { "value": "reminder", "label": "提醒" },
+                { "value": "system", "label": "系统" }
+              ]
+            },
+            "read": { "type": "boolean", "title": "已读" },
+            "created_at": { "type": "string", "format": "date-time", "title": "时间" }
+          }
+        }
+      }
+    },
+    "tools": [
+      {
+        "name": "mark_all_read",
+        "description": "标记全部为已读",
+        "parameters": {},
+        "protocol": "http",
+        "method": "POST",
+        "url": "/api/notifications/mark-all-read",
+        "onSuccess": [
+          { "type": "message", "message": "已标记全部为已读", "level": "success" },
+          { "type": "reload" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "items": [
+    {
+      "id": "reviewer-001",
+      "name": "王五",
+      "email": "wangwu@example.com",
+      "affiliation": "XX 大学",
+      "expertise": ["深度学习", "图像识别"],
+      "status": "active",
+      "papers_reviewed": 25,
+      "on_time_rate": "100%"
+    },
+    {
+      "id": "reviewer-002",
+      "name": "赵六",
+      "email": "zhaoliu@example.com",
+      "affiliation": "YY 研究所",
+      "expertise": ["自然语言处理", "机器学习"],
+      "status": "active",
+      "papers_reviewed": 18,
+      "on_time_rate": "95%"
+    },
+    {
+      "id": "reviewer-003",
+      "name": "孙九",
+      "email": "sunjiu@example.com",
+      "affiliation": "ZZ 研究中心",
+      "expertise": ["强化学习", "机器人控制"],
+      "status": "active",
+      "papers_reviewed": 32,
+      "on_time_rate": "98%"
+    },
+    {
+      "id": "reviewer-004",
+      "name": "周十",
+      "email": "zhoushi@example.com",
+      "affiliation": "AA 大学",
+      "expertise": ["数据挖掘", "推荐系统"],
+      "status": "inactive",
+      "papers_reviewed": 15,
+      "on_time_rate": "90%"
+    }
+  ],
+  "_schema": {
+    "type": "object",
+    "title": "评审专家管理",
+    "description": "管理评审专家信息",
+    "properties": {
+      "items": {
+        "type": "array",
+        "title": "专家列表",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "title": "编号" },
+            "name": { "type": "string", "title": "姓名" },
+            "email": { "type": "string", "title": "邮箱" },
+            "affiliation": { "type": "string", "title": "单位" },
+            "expertise": { "type": "array", "title": "研究领域", "items": { "type": "string" } },
+            "status": {
+              "type": "string",
+              "title": "状态",
+              "enum": [
+                { "value": "active", "label": "活跃" },
+                { "value": "inactive", "label": "非活跃" }
+              ]
+            },
+            "papers_reviewed": { "type": "integer", "title": "评审论文数" },
+            "on_time_rate": { "type": "string", "title": "按时完成率" }
+          }
+        }
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "add_reviewer",
+          "description": "添加评审专家",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string" },
+              "affiliation": { "type": "string" }
+            }
+          }
+        },
+        "execution": {
+          "protocol": "navigate",
+          "navigate": {
+            "target": "/editor/reviewers/new"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "message": "登录成功",
+  "data": {
+    "id": "editor-001",
+    "username": "admin",
+    "role": "editor",
+    "token": "mock-token-12345"
+  },
+  "actions": [
+    { "type": "message", "message": "登录成功", "level": "success" },
+    { "type": "navigate", "target": "/" },
+    { "type": "reload" }
+  ]
+}

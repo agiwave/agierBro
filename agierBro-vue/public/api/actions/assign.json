@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "message": "操作成功",
+  "data": {
+    "id": "paper-001",
+    "reviewer": "reviewer-001"
+  },
+  "actions": [
+    { "type": "message", "message": "分配成功", "level": "success" },
+    { "type": "reload" }
+  ]
+}

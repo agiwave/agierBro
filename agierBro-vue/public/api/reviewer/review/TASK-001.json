@@ -1,0 +1,65 @@
+{
+  "task_id": "TASK-001",
+  "paper_title": "基于深度学习的图像识别研究",
+  "score": 80,
+  "comments": "",
+  "recommendation": "accept",
+  "_schema": {
+    "type": "object",
+    "title": "论文评审表",
+    "description": "请填写评审意见（演示模式）",
+    "properties": {
+      "task_id": {
+        "type": "string",
+        "title": "任务编号"
+      },
+      "paper_title": {
+        "type": "string",
+        "title": "论文标题"
+      },
+      "score": {
+        "type": "number",
+        "title": "论文评分",
+        "description": "请输入 0-100 的评分",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "comments": {
+        "type": "string",
+        "title": "评审意见",
+        "description": "请详细填写评审意见"
+      },
+      "recommendation": {
+        "type": "string",
+        "title": "评审结论",
+        "enum": [
+          { "value": "accept", "label": "同意发表" },
+          { "value": "revise", "label": "修改后发表" },
+          { "value": "reject", "label": "拒绝发表" }
+        ]
+      }
+    },
+    "tools": [
+      {
+        "name": "submit_review",
+        "title": "提交评审",
+        "description": "提交评审结果（演示模式）",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "task_id": { "type": "string" },
+            "score": { "type": "number" },
+            "comments": { "type": "string" },
+            "recommendation": { "type": "string" }
+          }
+        },
+        "protocol": "http",
+        "url": "/api/reviewer/mock-submit",
+        "action": {
+          "type": "navigate",
+          "target": "/reviewer/tasks"
+        }
+      }
+    ]
+  }
+}

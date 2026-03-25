@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "nav"
+      },
+      "icon": "📑",
+      "title": "论文评审系统",
+      "links": [
+        { "title": "首页", "url": "/" },
+        { "title": "编辑后台", "url": "/editor" },
+        { "title": "专家后台", "url": "/reviewer" },
+        { "title": "通知", "url": "/notifications" },
+        { "title": "登录", "url": "/auth/login" }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "hero"
+      },
+      "icon": "🎓",
+      "title": "论文评审系统",
+      "subtitle": "高效、专业、智能的学术评审平台",
+      "description": "连接编辑与评审专家，简化论文评审流程，提升学术出版效率",
+      "actions": [
+        { "title": "立即登录", "url": "/auth/login", "variant": "primary" },
+        { "title": "免费注册", "url": "/auth/register", "variant": "secondary" }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "stats"
+      },
+      "items": [
+        { "number": "10,000+", "label": "注册论文" },
+        { "number": "500+", "label": "评审专家" },
+        { "number": "98%", "label": "按时完成率" },
+        { "number": "24/7", "label": "系统可用性" }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "features"
+      },
+      "title": "核心功能",
+      "items": [
+        { "icon": "📄", "title": "论文管理", "description": "便捷的论文提交、跟踪和管理系统", "link": "/editor" },
+        { "icon": "📋", "title": "智能评审", "description": "自动分配评审任务，实时跟踪评审进度", "link": "/reviewer/tasks" },
+        { "icon": "👥", "title": "专家库管理", "description": "汇聚各领域专家学者，建立专业评审团队", "link": "/auth/register" },
+        { "icon": "📊", "title": "数据分析", "description": "可视化评审数据统计，为决策提供科学依据", "link": "/editor/stats" }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "cta"
+      },
+      "title": "准备好开始了吗？",
+      "description": "立即注册，体验高效的论文评审流程",
+      "actions": [
+        { "title": "免费注册", "url": "/auth/register", "variant": "primary" }
+      ]
+    },
+    {
+      "_schema": {
+        "type": "object",
+        "semantic": "footer"
+      },
+      "copyright": "© 2024 论文评审系统。All rights reserved.",
+      "links": [
+        { "title": "关于我们", "url": "/about" },
+        { "title": "联系方式", "url": "/contact" },
+        { "title": "隐私政策", "url": "/privacy" }
+      ]
+    }
+  ],
+  "_schema": {
+    "type": "object",
+    "title": "首页",
+    "properties": {
+      "items": {
+        "type": "array",
+        "title": "页面区块",
+        "items": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

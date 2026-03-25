@@ -1,0 +1,102 @@
+{
+  "items": [
+    {
+      "id": "paper-001",
+      "title": "基于深度学习的图像识别研究",
+      "author": "张三",
+      "author_email": "zhangsan@example.com",
+      "status": "pending_review",
+      "submitted_at": "2024-03-20",
+      "reviewer": null
+    },
+    {
+      "id": "paper-002",
+      "title": "自然语言处理中的注意力机制研究",
+      "author": "李四",
+      "author_email": "lisi@example.com",
+      "status": "reviewing",
+      "submitted_at": "2024-03-18",
+      "reviewer": "王五"
+    },
+    {
+      "id": "paper-003",
+      "title": "强化学习在机器人控制中的应用",
+      "author": "王五",
+      "author_email": "wangwu@example.com",
+      "status": "reviewed",
+      "submitted_at": "2024-03-10",
+      "reviewer": "赵六"
+    },
+    {
+      "id": "paper-004",
+      "title": "联邦学习中的隐私保护技术研究",
+      "author": "陈七",
+      "author_email": "chenqi@example.com",
+      "status": "pending_review",
+      "submitted_at": "2024-03-22",
+      "reviewer": null
+    },
+    {
+      "id": "paper-005",
+      "title": "基于 Transformer 的文本生成模型优化",
+      "author": "刘八",
+      "author_email": "liuba@example.com",
+      "status": "reviewing",
+      "submitted_at": "2024-03-15",
+      "reviewer": "孙九"
+    }
+  ],
+  "pagination": {
+    "current": 1,
+    "total": 5,
+    "size": 10
+  },
+  "_schema": {
+    "type": "object",
+    "title": "论文管理",
+    "description": "管理所有投稿论文",
+    "properties": {
+      "items": {
+        "type": "array",
+        "title": "论文列表",
+        "items": {
+          "type": "object",
+          "_address": "/editor/papers/{id}.json",
+          "properties": {
+            "id": { "type": "string", "title": "编号" },
+            "title": { "type": "string", "title": "标题" },
+            "author": { "type": "string", "title": "作者" },
+            "author_email": { "type": "string", "title": "邮箱" },
+            "status": {
+              "type": "string",
+              "title": "状态",
+              "enum": [
+                { "value": "pending_review", "label": "待分配" },
+                { "value": "reviewing", "label": "评审中" },
+                { "value": "reviewed", "label": "已评审" }
+              ]
+            },
+            "submitted_at": { "type": "string", "title": "提交时间" },
+            "reviewer": { "type": "string", "title": "评审专家" }
+          }
+        }
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "create_paper",
+          "description": "创建新论文",
+          "parameters": {}
+        },
+        "execution": {
+          "protocol": "navigate",
+          "navigate": {
+            "target": "/editor/papers/new"
+          }
+        }
+      }
+    ]
+  }
+}

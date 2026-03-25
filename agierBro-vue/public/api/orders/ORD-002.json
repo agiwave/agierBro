@@ -1,0 +1,53 @@
+{
+  "id": "ORD-002",
+  "order_no": "ORD-20240102001",
+  "customer_name": "李四",
+  "customer_phone": "13900139000",
+  "customer_email": "lisi@example.com",
+  "status": "pending",
+  "total_amount": 360.00,
+  "created_at": "2024-01-02T14:00:00Z",
+  "updated_at": "2024-01-02T14:30:00Z",
+  "_schema": {
+    "type": "object",
+    "title": "订单详情",
+    "properties": {
+      "id": { "type": "string", "title": "订单 ID" },
+      "order_no": { "type": "string", "title": "订单编号" },
+      "customer_name": { "type": "string", "title": "客户姓名" },
+      "customer_phone": { "type": "string", "title": "联系电话" },
+      "customer_email": { "type": "string", "title": "电子邮箱" },
+      "status": { "type": "string", "title": "状态" },
+      "total_amount": { "type": "number", "title": "总金额" },
+      "created_at": { "type": "date", "title": "创建时间" },
+      "updated_at": { "type": "date", "title": "更新时间" }
+    },
+    "tools": [
+      {
+        "name": "approve_order",
+        "title": "通过",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" }
+          }
+        },
+        "protocol": "http",
+        "url": "/api/orders/{id}/approve",
+        "action": {
+          "type": "navigate",
+          "target": "/orders/{id}"
+        }
+      },
+      {
+        "name": "reject_order",
+        "title": "拒绝",
+        "protocol": "http",
+        "url": "/api/orders/{id}/reject",
+        "action": {
+          "type": "back"
+        }
+      }
+    ]
+  }
+}

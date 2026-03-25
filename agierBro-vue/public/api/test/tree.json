@@ -1,0 +1,43 @@
+{
+  "title": "论文分类",
+  "nodes": [
+    {
+      "title": "计算机科学",
+      "icon": "💻",
+      "children": [
+        {
+          "title": "人工智能",
+          "children": [
+            { "title": "深度学习", "content": "/api/papers?category=dl" },
+            { "title": "机器学习", "content": "/api/papers?category=ml" },
+            { "title": "自然语言处理", "content": "/api/papers?category=nlp" }
+          ]
+        },
+        {
+          "title": "软件工程",
+          "children": [
+            { "title": "系统架构", "content": "/api/papers?category=arch" },
+            { "title": "开发方法", "content": "/api/papers?category=dev" }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "工程学",
+      "icon": "⚙️",
+      "children": [
+        {
+          "title": "电子工程",
+          "children": [
+            { "title": "电路设计", "content": "/api/papers?category=circuit" },
+            { "title": "嵌入式系统", "content": "/api/papers?category=embedded" }
+          ]
+        }
+      ]
+    }
+  ],
+  "_schema": {
+    "type": "object",
+    "semantic": "tree"
+  }
+}

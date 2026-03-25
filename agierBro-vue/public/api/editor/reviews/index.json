@@ -1,0 +1,95 @@
+{
+  "items": [
+    {
+      "id": "review-001",
+      "paper_id": "paper-002",
+      "paper_title": "自然语言处理中的注意力机制研究",
+      "reviewer": "王五",
+      "reviewer_email": "wangwu@example.com",
+      "status": "pending",
+      "assigned_at": "2024-03-19",
+      "due_date": "2024-04-02",
+      "remind_count": 1
+    },
+    {
+      "id": "review-002",
+      "paper_id": "paper-005",
+      "paper_title": "基于 Transformer 的文本生成模型优化",
+      "reviewer": "孙九",
+      "reviewer_email": "sunjiu@example.com",
+      "status": "submitted",
+      "assigned_at": "2024-03-16",
+      "due_date": "2024-03-30",
+      "submitted_at": "2024-03-20",
+      "remind_count": 0
+    },
+    {
+      "id": "review-003",
+      "paper_id": "paper-003",
+      "paper_title": "强化学习在机器人控制中的应用",
+      "reviewer": "赵六",
+      "reviewer_email": "zhaoliu@example.com",
+      "status": "reviewed",
+      "assigned_at": "2024-03-10",
+      "due_date": "2024-03-24",
+      "submitted_at": "2024-03-22",
+      "remind_count": 0
+    }
+  ],
+  "_schema": {
+    "type": "object",
+    "title": "评审管理",
+    "description": "管理所有论文的评审流程",
+    "properties": {
+      "items": {
+        "type": "array",
+        "title": "评审列表",
+        "items": {
+          "type": "object",
+          "_address": "/editor/reviews/{id}.json",
+          "properties": {
+            "id": { "type": "string", "title": "评审编号" },
+            "paper_title": { "type": "string", "title": "论文标题" },
+            "reviewer": { "type": "string", "title": "评审专家" },
+            "reviewer_email": { "type": "string", "title": "邮箱" },
+            "status": {
+              "type": "string",
+              "title": "状态",
+              "enum": [
+                { "value": "pending", "label": "待评审" },
+                { "value": "submitted", "label": "已提交" },
+                { "value": "reviewed", "label": "已评审" }
+              ]
+            },
+            "assigned_at": { "type": "string", "title": "分配时间" },
+            "due_date": { "type": "string", "title": "截止日期" },
+            "submitted_at": { "type": "string", "title": "提交时间" },
+            "remind_count": { "type": "integer", "title": "提醒次数" }
+          }
+        }
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "export_reviews",
+          "description": "导出评审数据",
+          "parameters": {}
+        },
+        "execution": {
+          "protocol": "http",
+          "http": {
+            "method": "GET",
+            "url": "/api/editor/reviews/export"
+          }
+        },
+        "response": {
+          "onSuccess": [
+            { "type": "message", "message": "导出成功", "level": "success" }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "items": [
+    {
+      "id": "review-001",
+      "paper_id": "paper-001",
+      "paper_title": "基于深度学习的图像识别研究",
+      "paper_author": "张三",
+      "status": "pending",
+      "assigned_at": "2024-03-21",
+      "due_date": "2024-04-04"
+    },
+    {
+      "id": "review-002",
+      "paper_id": "paper-004",
+      "paper_title": "联邦学习中的隐私保护技术研究",
+      "paper_author": "陈七",
+      "status": "pending",
+      "assigned_at": "2024-03-23",
+      "due_date": "2024-04-06"
+    },
+    {
+      "id": "review-003",
+      "paper_id": "paper-002",
+      "paper_title": "自然语言处理中的注意力机制研究",
+      "paper_author": "李四",
+      "status": "submitted",
+      "assigned_at": "2024-03-15",
+      "due_date": "2024-03-29",
+      "submitted_at": "2024-03-20"
+    }
+  ],
+  "_schema": {
+    "type": "object",
+    "title": "评审任务",
+    "description": "我的评审任务列表",
+    "properties": {
+      "items": {
+        "type": "array",
+        "title": "任务列表",
+        "items": {
+          "type": "object",
+          "_address": "/reviewer/reviews/{id}.json",
+          "properties": {
+            "id": { "type": "string", "title": "任务编号" },
+            "paper_title": { "type": "string", "title": "论文标题" },
+            "paper_author": { "type": "string", "title": "作者" },
+            "status": {
+              "type": "string",
+              "title": "状态",
+              "enum": [
+                { "value": "pending", "label": "待评审" },
+                { "value": "submitted", "label": "已提交" }
+              ]
+            },
+            "assigned_at": { "type": "string", "title": "分配时间" },
+            "due_date": { "type": "string", "title": "截止日期" }
+          }
+        }
+      }
+    }
+  }
+}

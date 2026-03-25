@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "message": "评审意见已提交",
+  "data": {
+    "id": "review-001",
+    "status": "submitted",
+    "submitted_at": "2024-03-24T10:00:00Z"
+  },
+  "actions": [
+    { "type": "message", "message": "评审意见已提交", "level": "success" },
+    { "type": "navigate", "target": "/reviewer/tasks" }
+  ]
+}

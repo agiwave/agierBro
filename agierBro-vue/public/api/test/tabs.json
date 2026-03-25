@@ -1,0 +1,73 @@
+{
+  "title": "论文详情",
+  "tabs": [
+    {
+      "key": "basic",
+      "label": "基本信息",
+      "content": {
+        "id": "paper-001",
+        "title": "基于深度学习的图像识别研究",
+        "author": "张三",
+        "email": "zhangsan@example.com",
+        "status": "pending_review",
+        "submitted_at": "2024-03-20"
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "title": "编号" },
+          "title": { "type": "string", "title": "标题" },
+          "author": { "type": "string", "title": "作者" },
+          "email": { "type": "string", "title": "邮箱" },
+          "status": { "type": "string", "title": "状态" },
+          "submitted_at": { "type": "string", "title": "提交时间" }
+        }
+      }
+    },
+    {
+      "key": "abstract",
+      "label": "摘要",
+      "content": {
+        "abstract": "本文提出了一种新的基于深度学习的图像识别方法。该方法结合了卷积神经网络（CNN）和注意力机制，能够有效提升图像识别的准确率和效率。通过在 ImageNet 数据集上的实验验证，我们的方法在 top-1 准确率上达到了 85.6%，相比基线模型提升了 3.2 个百分点。",
+        "keywords": ["深度学习", "图像识别", "CNN", "注意力机制"]
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "abstract": { "type": "string", "title": "摘要" },
+          "keywords": { "type": "array", "title": "关键词", "items": { "type": "string" } }
+        }
+      }
+    },
+    {
+      "key": "reviews",
+      "label": "评审意见",
+      "content": {
+        "items": [
+          { "reviewer": "王五", "recommendation": "accept", "comment": "优秀的论文，方法新颖" },
+          { "reviewer": "赵六", "recommendation": "minor_revision", "comment": "需要补充实验对比" }
+        ]
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reviewer": { "type": "string", "title": "评审人" },
+                "recommendation": { "type": "string", "title": "结论" },
+                "comment": { "type": "string", "title": "意见" }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "_schema": {
+    "type": "object",
+    "semantic": "tabs"
+  }
+}

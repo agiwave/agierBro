@@ -1,0 +1,25 @@
+{
+  "items": [
+    { "label": "待处理任务 (18)", "url": "/reviewer/tasks?status=pending" },
+    { "label": "已完成 (29)", "url": "/reviewer/tasks?status=completed" },
+    { "label": "已超期 (0)", "url": "/reviewer/tasks?status=overdue" },
+    { "label": "全部 (47)", "url": "/reviewer/tasks?status=all" }
+  ],
+  "_schema": {
+    "type": "object",
+    "title": "评审任务",
+    "properties": {
+      "items": {
+        "type": "array",
+        "title": "任务筛选",
+        "items": {
+          "type": "object",
+          "_address": "{url}",
+          "properties": {
+            "label": { "type": "string", "title": "标签" }
+          }
+        }
+      }
+    }
+  }
+}

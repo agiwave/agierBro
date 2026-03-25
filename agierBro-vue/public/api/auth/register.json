@@ -1,0 +1,96 @@
+{
+  "username": "",
+  "email": "",
+  "password": "",
+  "confirm_password": "",
+  "affiliation": "",
+  "role": "reviewer",
+  "_schema": {
+    "type": "object",
+    "title": "注册账号",
+    "description": "创建新账号，成为编辑或评审专家",
+    "properties": {
+      "username": {
+        "type": "string",
+        "title": "用户名",
+        "required": true,
+        "minLength": 3,
+        "maxLength": 20,
+        "placeholder": "3-20 个字符"
+      },
+      "email": {
+        "type": "string",
+        "title": "邮箱",
+        "format": "email",
+        "required": true,
+        "placeholder": "example@domain.com"
+      },
+      "password": {
+        "type": "string",
+        "title": "密码",
+        "format": "password",
+        "required": true,
+        "minLength": 6,
+        "placeholder": "至少 6 个字符"
+      },
+      "confirm_password": {
+        "type": "string",
+        "title": "确认密码",
+        "format": "password",
+        "required": true
+      },
+      "affiliation": {
+        "type": "string",
+        "title": "所在单位",
+        "required": true,
+        "placeholder": "大学/研究所/公司"
+      },
+      "role": {
+        "type": "string",
+        "title": "注册角色",
+        "enum": [
+          { "value": "reviewer", "label": "评审专家" },
+          { "value": "editor", "label": "编辑" }
+        ],
+        "default": "reviewer"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "register",
+          "description": "注册新账号",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "username": { "type": "string" },
+              "email": { "type": "string" },
+              "password": { "type": "string" },
+              "confirm_password": { "type": "string" },
+              "affiliation": { "type": "string" },
+              "role": { "type": "string" }
+            },
+            "required": ["username", "email", "password", "affiliation", "role"]
+          }
+        },
+        "execution": {
+          "protocol": "http",
+          "http": {
+            "method": "POST",
+            "url": "/api/auth/register"
+          }
+        },
+        "response": {
+          "onSuccess": [
+            { "type": "message", "message": "注册成功，请登录", "level": "success" },
+            { "type": "navigate", "target": "/auth/login" }
+          ],
+          "onError": [
+            { "type": "message", "message": "注册失败，用户名可能已存在", "level": "error" }
+          ]
+        }
+      }
+    ]
+  }
+}
