@@ -12,12 +12,12 @@
           </div>
         </div>
       </Teleport>
-      <button 
-        class="btn btn-primary" 
+      <button
+        class="btn btn-primary"
         :class="getButtonClass(tool)"
         @click="handleClick(tool)"
       >
-        {{ tool.name }}
+        {{ tool.displayName || tool.name }}
       </button>
     </template>
   </div>

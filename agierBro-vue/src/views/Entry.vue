@@ -43,6 +43,7 @@
         :schema="schema"
         :data="data as DataObject"
         @itemClick="handleItemClick"
+        @toolExecuted="handleToolExecuted"
       />
 
       <!-- 详情/表单数据：使用统一 SchemaRenderer -->

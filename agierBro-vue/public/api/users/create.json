@@ -89,6 +89,7 @@
     "tools": [
       {
         "name": "submit",
+        "displayName": "提交",
         "description": "创建用户",
         "protocol": "http",
         "method": "POST",
@@ -103,7 +104,8 @@
       },
       {
         "name": "cancel",
-        "description": "取消",
+        "displayName": "取消",
+        "description": "取消操作",
         "protocol": "navigate",
         "target": "/users"
       }

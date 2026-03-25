@@ -19,7 +19,35 @@
           "status": { "type": "string", "title": "状态" },
           "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
         }
-      }
+      },
+      "_tools": [
+        {
+          "name": "view",
+          "displayName": "查看",
+          "description": "查看详情",
+          "protocol": "navigate",
+          "target": "/users/user-001"
+        },
+        {
+          "name": "edit",
+          "displayName": "编辑",
+          "description": "编辑用户",
+          "protocol": "navigate",
+          "target": "/users/user-001/edit"
+        },
+        {
+          "name": "delete",
+          "displayName": "删除",
+          "description": "删除用户",
+          "protocol": "http",
+          "method": "DELETE",
+          "url": "/api/users/user-001",
+          "onSuccess": [
+            { "type": "reload" },
+            { "type": "message", "message": "用户已删除", "level": "success" }
+          ]
+        }
+      ]
     },
     {
       "id": "user-002",
@@ -38,7 +66,35 @@
           "status": { "type": "string", "title": "状态" },
           "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
         }
-      }
+      },
+      "_tools": [
+        {
+          "name": "view",
+          "displayName": "查看",
+          "description": "查看详情",
+          "protocol": "navigate",
+          "target": "/users/user-002"
+        },
+        {
+          "name": "edit",
+          "displayName": "编辑",
+          "description": "编辑用户",
+          "protocol": "navigate",
+          "target": "/users/user-002/edit"
+        },
+        {
+          "name": "delete",
+          "displayName": "删除",
+          "description": "删除用户",
+          "protocol": "http",
+          "method": "DELETE",
+          "url": "/api/users/user-002",
+          "onSuccess": [
+            { "type": "reload" },
+            { "type": "message", "message": "用户已删除", "level": "success" }
+          ]
+        }
+      ]
     },
     {
       "id": "user-003",
@@ -57,13 +113,42 @@
           "status": { "type": "string", "title": "状态" },
           "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
         }
-      }
+      },
+      "_tools": [
+        {
+          "name": "view",
+          "displayName": "查看",
+          "description": "查看详情",
+          "protocol": "navigate",
+          "target": "/users/user-003"
+        },
+        {
+          "name": "edit",
+          "displayName": "编辑",
+          "description": "编辑用户",
+          "protocol": "navigate",
+          "target": "/users/user-003/edit"
+        },
+        {
+          "name": "delete",
+          "displayName": "删除",
+          "description": "删除用户",
+          "protocol": "http",
+          "method": "DELETE",
+          "url": "/api/users/user-003",
+          "onSuccess": [
+            { "type": "reload" },
+            { "type": "message", "message": "用户已删除", "level": "success" }
+          ]
+        }
+      ]
     }
   ],
   "tools": [
     {
       "name": "create",
-      "description": "创建用户",
+      "displayName": "创建用户",
+      "description": "添加新用户",
       "protocol": "navigate",
       "target": "/users/create"
     }
@@ -92,7 +177,8 @@
     "tools": [
       {
         "name": "create",
-        "description": "创建用户",
+        "displayName": "创建用户",
+        "description": "添加新用户",
         "protocol": "navigate",
         "target": "/users/create"
       }

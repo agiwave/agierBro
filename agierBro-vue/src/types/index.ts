@@ -125,6 +125,7 @@ export interface Action {
 // ========== Tool 定义（简化版） ==========
 export interface Tool {
   name: string
+  displayName?: string  // 显示名称（用于按钮文字）
   description: string
   parameters?: Schema
   protocol: 'http' | 'mcp' | 'navigate'

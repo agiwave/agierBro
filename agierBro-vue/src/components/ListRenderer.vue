@@ -8,28 +8,36 @@
             <th v-for="col in visibleColumns" :key="col.key">
               {{ col.title }}
             </th>
+            <th v-if="hasTools" class="th-tools">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="(item, index) in items" 
-            :key="index"
+          <tr
+            v-for="(item, index) in items"
+            :key="item.id || index"
             class="table-row"
             @click="handleItemClick(item)"
           >
             <td v-for="col in visibleColumns" :key="col.key">
               {{ formatValue(item[col.key], col.field) }}
             </td>
+            <td v-if="hasTools" class="td-tools" @click.stop>
+              <ToolButtons
+                :tools="getItemTools(item)"
+                :currentData="item"
+                @executed="handleToolExecuted"
+              />
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-    
+
     <!-- 卡片布局：字段数 2-4 -->
     <div v-else-if="layout === 'card'" class="list-cards">
-      <div 
-        v-for="(item, index) in items" 
-        :key="index"
+      <div
+        v-for="(item, index) in items"
+        :key="item.id || index"
         class="card"
         @click="handleItemClick(item)"
       >
@@ -37,14 +45,21 @@
           <span class="card-label">{{ col.title }}</span>
           <span class="card-value">{{ formatValue(item[col.key], col.field) }}</span>
         </div>
+        <div v-if="hasTools" class="card-tools" @click.stop>
+          <ToolButtons
+            :tools="getItemTools(item)"
+            :currentData="item"
+            @executed="handleToolExecuted"
+          />
+        </div>
       </div>
     </div>
-    
+
     <!-- 按钮布局：字段数 = 1 -->
     <div v-else-if="layout === 'button'" class="list-buttons">
       <button
         v-for="(item, index) in items"
-        :key="index"
+        :key="item.id || index"
         class="btn"
         @click="handleItemClick(item)"
       >
@@ -56,7 +71,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Schema, DataObject, Field } from '@/types'
+import type { Schema, DataObject, Field, Tool, ToolResponse } from '@/types'
+import ToolButtons from './ToolButtons.vue'
 
 const props = defineProps<{
   schema: Schema | null
@@ -65,6 +81,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   itemClick: [url: string]
+  toolExecuted: [result: ToolResponse]
 }>()
 
 const items = computed<DataObject[]>(() => props.data?.items || [])
@@ -100,6 +117,21 @@ const layout = computed<'table' | 'card' | 'button'>(() => {
   if (count <= 4) return 'card'
   return 'table'
 })
+
+// 检查是否有 tools
+const hasTools = computed(() => {
+  return items.value.some(item => item._tools && item._tools.length > 0)
+})
+
+// 获取 item 的 tools
+function getItemTools(item: DataObject): Tool[] {
+  return item._tools || []
+}
+
+// 处理 tool 执行
+function handleToolExecuted(result: ToolResponse) {
+  emit('toolExecuted', result)
+}
 
 function formatLabel(key: string): string {
   return key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim()
@@ -252,6 +284,33 @@ function handleItemClick(item: DataObject) {
   border-color: #1890ff;
   color: #1890ff;
   background: #f5f5f5;
+}
+
+/* Tools 操作列 */
+.th-tools, .td-tools {
+  width: 1%;
+  white-space: nowrap;
+  padding: 8px 12px;
+}
+
+.th-tools {
+  text-align: center;
+}
+
+.td-tools {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* 卡片工具按钮 */
+.card-tools {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* 移动端优化 */
