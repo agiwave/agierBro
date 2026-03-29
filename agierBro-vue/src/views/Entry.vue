@@ -23,52 +23,32 @@
       <p>API: {{ apiUrl }}</p>
     </div>
 
-    <!-- 数据加载成功 -->
+    <!-- 数据加载成功 - v6.2: 简化渲染逻辑 -->
     <div v-else class="content-wrapper">
-      <!-- 后台首页：有 menu 字段的对象 -->
-      <DashboardLayout
-        v-if="isDashboard"
-        :data="pageData"
-      />
-
-      <!-- Section 列表：items 数组且每个元素都有独立的 _schema -->
-      <SectionList
-        v-else-if="isSectionList"
-        :items="(pageData.items || []) as DataObject[]"
-      />
-
-      <!-- 列表数据：使用统一 ListRenderer -->
-      <ListRenderer
-        v-else-if="isItemList"
-        :schema="outSchema"
-        :data="pageData as DataObject"
+      <!-- 统一使用 SectionRenderer -->
+      <SectionRenderer 
+        v-if="pageData" 
+        :data="pageData" 
         @itemClick="handleItemClick"
-        @toolExecuted="handleToolExecuted"
       />
-
-      <!-- 详情/表单数据：使用统一 SchemaRenderer -->
-      <SchemaRenderer
-        v-else-if="pageData && currentSchema"
-        :schema="currentSchema"
-        :data="displayData"
-        :mode="mode"
-        @submit="handleSubmit"
-        @toolExecuted="handleToolExecuted"
-      />
+      
+      <!-- Tools 操作按钮（如果有） -->
+      <div v-if="tools.length" class="tool-section">
+        <ToolButtons :tools="tools" :currentData="pageData" @executed="handleToolExecuted" />
+      </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { Schema, DataObject, ToolDescriptor, ToolResponse, PageDescriptor } from '@/types'
+import type { Schema, DataObject, Tool, ToolResponse, PageDescriptor } from '@/types'
 import { extractOutSchema, extractInSchema, fetchPageData, needsInput, executeTool } from '@/services/api'
 import { getUrlApiMapping } from '@/router'
 import { useAppStore } from '@/stores/app'
-import ListRenderer from '@/components/ListRenderer.vue'
-import SchemaRenderer from '@/components/SchemaRenderer.vue'
-import SectionList from '@/components/SectionList.vue'
-import DashboardLayout from '@/components/DashboardLayout.vue'
+import SectionRenderer from '@/components/SectionRenderer.vue'
+import ToolButtons from '@/components/ToolButtons.vue'
 import GlobalToast from '@/components/GlobalToast.vue'
 
 const route = useRoute()
@@ -84,28 +64,9 @@ const pageData = ref<PageDescriptor | null>(null)
 const formData = ref<DataObject>({})
 const mode = ref<'view' | 'edit'>('view')
 
-// 后台首页识别：有 menu 字段的对象
-const isDashboard = computed(() => {
-  return pageData.value?.menu && Array.isArray(pageData.value.menu)
-})
-
-// Section 列表识别
-const isSectionList = computed(() => {
-  const items = pageData.value?.items
-  if (!items || items.length === 0) return false
-  return items.every((item: any) => item._schema)
-})
-
-// 普通列表识别
-const isItemList = computed(() => {
-  const items = pageData.value?.items
-  if (!items || items.length === 0) return false
-  return !items.every((item: any) => item._schema)
-})
+// v6.2: 简化 - 移除多层判断，统一使用 SectionRenderer
 
 // 当前使用的 Schema
-// - 如果是数据工具（无输入），使用 outSchema 展示数据
-// - 如果是表单工具（有输入），使用 inSchema 呈现表单
 const currentSchema = computed<Schema | null>(() => {
   if (mode.value === 'edit') {
     return inSchema.value
@@ -114,8 +75,6 @@ const currentSchema = computed<Schema | null>(() => {
 })
 
 // 展示的数据
-// - 如果是表单模式，展示空数据或默认值（等待用户输入）
-// - 如果是数据模式，展示实际数据
 const displayData = computed<DataObject>(() => {
   if (mode.value === 'edit') {
     return formData.value
@@ -123,25 +82,20 @@ const displayData = computed<DataObject>(() => {
   return pageData.value as DataObject
 })
 
+// 获取 tools
+const tools = computed<Tool[]>(() => {
+  const pageTools = pageData.value?._tools
+  if (!pageTools) return []
+  // v6.0: _tools 是 ToolDescriptor 数组，需要转换
+  return pageTools as unknown as Tool[]
+})
+
 function computeApiUrl(): string {
   return getUrlApiMapping(route.path)
 }
 
 /**
- * 加载数据
- *
- * 一切皆工具描述架构：
- * - 每个接口返回的都是工具的描述
- * - in: 输入参数（有值=需要表单，无值=直接展示数据）
- * - out: 输出数据结构
- *
- * 前端判断逻辑：
- * - 有 in 且包含 required 字段 → 呈现表单（edit 模式）
- * - 无 in 或 in 为空 → 展示数据（view 模式）
- *
- * 统一路由规则：
- * - / → /api/index.json
- * - /xxx/yyy/zzz → /api/xxx/yyy/zzz.json
+ * 加载数据 - v6.2: 简化逻辑
  */
 async function loadData() {
   loading.value = true
@@ -154,12 +108,6 @@ async function loadData() {
 
   try {
     apiUrl.value = computeApiUrl()
-    
-    // 统一路由规则：直接使用 route.path
-    // / → index
-    // /users → users
-    // /users/001 → users/001
-    // /users/001/edit → users/001/edit
     const apiPath = route.path === '/' ? 'index' : route.path.replace(/^\//, '')
     
     const result = await fetchPageData(apiPath)
@@ -169,8 +117,7 @@ async function loadData() {
     
     // 判断是否需要输入
     if (needsInput(result)) {
-      mode.value = 'edit'   // 需要输入，呈现表单
-      // 初始化表单数据
+      mode.value = 'edit'
       if (inSchema.value?.properties) {
         Object.keys(inSchema.value.properties).forEach(key => {
           const prop = inSchema.value!.properties[key]
@@ -178,7 +125,7 @@ async function loadData() {
         })
       }
     } else {
-      mode.value = 'view'  // 无需输入，展示数据
+      mode.value = 'view'
     }
   } catch (e) {
     error.value = e instanceof Error ? e.message : '未知错误'
@@ -188,9 +135,6 @@ async function loadData() {
 }
 
 async function handleToolExecuted(result: ToolResponse) {
-  console.log('Tool executed:', result)
-
-  // 处理 actions
   if (result.actions) {
     for (const action of result.actions) {
       if (action.type === 'navigate' && action.target) {
@@ -204,8 +148,6 @@ async function handleToolExecuted(result: ToolResponse) {
       }
     }
   }
-
-  // 向后兼容
   if (result.navigateTo) router.push(result.navigateTo)
   if (result.reload) await loadData()
   if (result.message && !result.actions) {
@@ -214,33 +156,31 @@ async function handleToolExecuted(result: ToolResponse) {
 }
 
 async function handleSubmit() {
-  console.log('Submit:', formData.value)
-  
-  // 一切皆工具描述架构下，提交表单就是调用工具
-  // 工具信息从 pageData 中获取
   if (pageData.value) {
-    const tool: ToolDescriptor = {
+    const result = await executeTool({
       _schema: pageData.value._schema,
       protocol: 'http',
       method: 'POST',
-      url: apiUrl.value.replace('/api/', '/api/').replace('.json', '.json'),
-      tools: pageData.value._tools
-    }
-    
-    const result = await executeTool(tool, formData.value)
+      url: apiUrl.value
+    } as any, formData.value)
     await handleToolExecuted(result)
   } else {
     appStore.showSuccess('保存成功')
   }
 }
 
-function handleItemClick(url: string) {
-  router.push(url)
+function handleItemClick(item: DataObject) {
+  // 从 item 中获取 url
+  const url = (item as any).url || (item as any).target
+  if (url) {
+    router.push(url)
+  }
 }
 
 onMounted(loadData)
 watch(() => route.fullPath, loadData)
 </script>
+
 <style scoped>
 .entry-page {
   min-height: 100vh;
@@ -304,6 +244,13 @@ watch(() => route.fullPath, loadData)
   padding: var(--spacing-lg);
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.tool-section {
+  margin-top: var(--spacing-xl);
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
 }
 
 /* 移动端优化 */
