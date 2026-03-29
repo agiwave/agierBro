@@ -25,9 +25,15 @@
 
     <!-- 数据加载成功 - v6.2: 简化渲染逻辑 -->
     <div v-else class="content-wrapper">
-      <!-- 统一使用 SectionRenderer -->
+      <!-- Section 列表：items 数组且每个元素都有独立的 _schema -->
+      <SectionList
+        v-if="isSectionList"
+        :items="(pageData.items || []) as DataObject[]"
+      />
+
+      <!-- 其他情况：使用 SectionRenderer -->
       <SectionRenderer 
-        v-if="pageData" 
+        v-else-if="pageData" 
         :data="pageData" 
         @itemClick="handleItemClick"
       />
@@ -48,6 +54,7 @@ import { extractOutSchema, extractInSchema, fetchPageData, needsInput, executeTo
 import { getUrlApiMapping } from '@/router'
 import { useAppStore } from '@/stores/app'
 import SectionRenderer from '@/components/SectionRenderer.vue'
+import SectionList from '@/components/SectionList.vue'
 import ToolButtons from '@/components/ToolButtons.vue'
 import GlobalToast from '@/components/GlobalToast.vue'
 
@@ -64,39 +71,23 @@ const pageData = ref<PageDescriptor | null>(null)
 const formData = ref<DataObject>({})
 const mode = ref<'view' | 'edit'>('view')
 
-// v6.2: 简化 - 移除多层判断，统一使用 SectionRenderer
-
-// 当前使用的 Schema
-const currentSchema = computed<Schema | null>(() => {
-  if (mode.value === 'edit') {
-    return inSchema.value
-  }
-  return outSchema.value
-})
-
-// 展示的数据
-const displayData = computed<DataObject>(() => {
-  if (mode.value === 'edit') {
-    return formData.value
-  }
-  return pageData.value as DataObject
+// Section 列表识别：items 数组且每个元素都有独立的 _schema
+const isSectionList = computed(() => {
+  const items = pageData.value?.items
+  if (!items || items.length === 0) return false
+  return items.every((item: any) => item._schema)
 })
 
 // 获取 tools
 const tools = computed<Tool[]>(() => {
   const pageTools = pageData.value?._tools
   if (!pageTools) return []
-  // v6.0: _tools 是 ToolDescriptor 数组，需要转换
   return pageTools as unknown as Tool[]
 })
 
 function computeApiUrl(): string {
   return getUrlApiMapping(route.path)
 }
-
-/**
- * 加载数据 - v6.2: 简化逻辑
- */
 async function loadData() {
   loading.value = true
   error.value = ''
