@@ -1,0 +1,54 @@
+{
+  "order_id": "order-001",
+  "order_no": "ORD-2026-001",
+  "reason": "",
+  "_schema": {
+    "in": {
+      "type": "object",
+      "title": "拒绝订单",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "title": "订单 ID",
+          "readOnly": true
+        },
+        "order_no": {
+          "type": "string",
+          "title": "订单号",
+          "readOnly": true
+        },
+        "reason": {
+          "type": "string",
+          "title": "拒绝原因",
+          "required": true,
+          "placeholder": "请输入拒绝原因"
+        }
+      }
+    },
+    "out": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "title": "消息"
+        },
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      }
+    }
+  },
+  "protocol": "http",
+  "method": "POST",
+  "url": "/api/orders/order-001/reject.json",
+  "_tools": [
+    {
+      "name": "cancel",
+      "displayName": "取消",
+      "description": "取消操作",
+      "protocol": "navigate",
+      "target": "/orders/order-001"
+    }
+  ]
+}

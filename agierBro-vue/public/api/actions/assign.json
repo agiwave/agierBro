@@ -6,7 +6,20 @@
     "reviewer": "reviewer-001"
   },
   "actions": [
-    { "type": "message", "message": "分配成功", "level": "success" },
-    { "type": "reload" }
-  ]
+    {
+      "type": "message",
+      "message": "分配成功",
+      "level": "success"
+    },
+    {
+      "type": "reload"
+    }
+  ],
+  "_schema": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "properties": {}
+    }
+  }
 }

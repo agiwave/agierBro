@@ -7,99 +7,94 @@
   "author_affiliation": "",
   "file": null,
   "_schema": {
-    "type": "object",
-    "title": "提交论文",
-    "description": "请填写论文信息并提交",
-    "order": ["title", "abstract", "keywords", "author_name", "author_email", "author_affiliation", "file"],
-    "properties": {
-      "title": {
-        "type": "string",
-        "title": "论文标题",
-        "required": true,
-        "maxLength": 100,
-        "placeholder": "请输入论文标题"
-      },
-      "abstract": {
-        "type": "string",
-        "title": "摘要",
-        "required": true,
-        "maxLength": 1000,
-        "placeholder": "请输入论文摘要（300-1000 字）"
-      },
-      "keywords": {
-        "type": "array",
-        "title": "关键词",
-        "items": { "type": "string" },
-        "required": true,
-        "placeholder": "输入关键词后按回车"
-      },
-      "author_name": {
-        "type": "string",
-        "title": "作者姓名",
-        "required": true,
-        "placeholder": "请输入作者姓名"
-      },
-      "author_email": {
-        "type": "string",
-        "title": "作者邮箱",
-        "format": "email",
-        "required": true,
-        "placeholder": "example@domain.com"
-      },
-      "author_affiliation": {
-        "type": "string",
-        "title": "作者单位",
-        "required": true,
-        "placeholder": "请输入所在单位"
-      },
-      "file": {
-        "type": "object",
-        "title": "论文附件",
-        "required": true,
-        "properties": {
-          "name": { "type": "string", "title": "文件名" },
-          "size": { "type": "number", "title": "文件大小" },
-          "url": { "type": "string", "title": "文件路径" }
+    "in": {
+      "type": "object",
+      "title": "提交论文",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "论文标题",
+          "required": true,
+          "maxLength": 100,
+          "placeholder": "请输入论文标题"
+        },
+        "abstract": {
+          "type": "string",
+          "title": "摘要",
+          "required": true,
+          "maxLength": 1000,
+          "placeholder": "请输入论文摘要（300-1000 字）"
+        },
+        "keywords": {
+          "type": "array",
+          "title": "关键词",
+          "items": {
+            "type": "string"
+          },
+          "required": true,
+          "placeholder": "输入关键词后按回车"
+        },
+        "author_name": {
+          "type": "string",
+          "title": "作者姓名",
+          "required": true,
+          "placeholder": "请输入作者姓名"
+        },
+        "author_email": {
+          "type": "string",
+          "title": "作者邮箱",
+          "format": "email",
+          "required": true,
+          "placeholder": "example@domain.com"
+        },
+        "author_affiliation": {
+          "type": "string",
+          "title": "作者单位",
+          "required": true,
+          "placeholder": "请输入所在单位"
+        },
+        "file": {
+          "type": "object",
+          "title": "论文附件",
+          "required": true,
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "文件名"
+            },
+            "size": {
+              "type": "number",
+              "title": "文件大小"
+            },
+            "url": {
+              "type": "string",
+              "title": "文件路径"
+            }
+          }
         }
       }
     },
-    "tools": [
-      {
-        "type": "function",
-        "function": {
-          "name": "submit_paper",
-          "description": "提交论文",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "title": { "type": "string" },
-              "abstract": { "type": "string" },
-              "keywords": { "type": "array" },
-              "author_name": { "type": "string" },
-              "author_email": { "type": "string" },
-              "author_affiliation": { "type": "string" },
-              "file": { "type": "object" }
-            },
-            "required": ["title", "author_name", "author_email", "file"]
-          }
+    "out": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "title": "消息"
         },
-        "execution": {
-          "protocol": "http",
-          "http": {
-            "method": "POST",
-            "url": "/api/editor/papers"
-          }
-        },
-        "response": {
-          "onSuccess": [
-            { "type": "message", "message": "论文提交成功", "level": "success" },
-            { "type": "navigate", "target": "/editor/papers" }
-          ],
-          "onError": [
-            { "type": "message", "message": "提交失败，请重试", "level": "error" }
-          ]
+        "id": {
+          "type": "string",
+          "title": "ID"
         }
       }
-    ]
-  }
+    }
+  },
+  "_tools": [
+    {
+      "name": "",
+      "displayName": "",
+      "description": "",
+      "protocol": "navigate",
+      "target": ""
+    }
+  ]
 }

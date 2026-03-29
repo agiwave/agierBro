@@ -1,19 +1,20 @@
 /**
- * AgierBro 核心类型定义 - 协议 v4.1
- * 
+ * AgierBro 核心类型定义 - 协议 v6.0 (纯工具描述)
+ *
  * 核心原则:
- * - 统一语义类型体系，所有类型平级
- * - 无特殊前缀，无分类注释
- * - Schema 定义结构，语义决定渲染
- * - 简化类型定义，删除冗余
+ * - 一切皆工具描述：所有接口返回的都是工具的 Schema
+ * - in: 工具的输入参数描述（调用工具需要什么）
+ * - out: 工具的输出描述（工具返回什么数据）
+ * - 前端根据 in 判断是否需要表单，根据 out 渲染数据
  */
 
 // ========== 统一的语义类型体系 ==========
-// 所有语义类型平级，无分类注释
 export type SemanticType =
+  // 布局/结构类型
   | 'nav' | 'tree' | 'tabs'
   | 'hero' | 'stats' | 'features'
   | 'cta' | 'footer' | 'content' | 'list'
+  // 字段语义类型
   | 'id' | 'title' | 'name' | 'description'
   | 'status' | 'amount' | 'date' | 'time'
   | 'email' | 'phone' | 'url' | 'image' | 'file'
@@ -47,7 +48,7 @@ export interface Field {
   readOnly?: boolean
   required?: boolean
   format?: string
-  semantic?: SemanticType  // 字段语义
+  semantic?: SemanticType
   group?: string
 
   // 约束
@@ -61,7 +62,6 @@ export interface Field {
   // 复杂类型
   items?: Field
   properties?: Record<string, Field>
-  _address?: string
 }
 
 // 基础字段类型
@@ -74,25 +74,19 @@ export type FieldType =
   | 'date-time'
   | 'object'
   | 'array'
-  | 'file'  // 文件类型
+  | 'file'
 
 // 文件字段扩展
 export interface FileField extends Field {
   type: 'file'
-  accept?: string        // 接受的文件类型
-  maxSize?: number       // 最大文件大小（字节）
-  maxFiles?: number      // 最大文件数量
-  uploadUrl?: string     // 上传地址
-  downloadUrl?: string   // 下载基础 URL
+  accept?: string
+  maxSize?: number
+  maxFiles?: number
+  uploadUrl?: string
+  downloadUrl?: string
 }
 
-// ========== Schema 引用 ==========
-// 支持两种格式：
-// 1. 简化格式：_schema: "nav"
-// 2. 标准格式：_schema: { type: 'object', semantic: 'nav' }
-export type SchemaRef = string | Schema
-
-// ========== 自定义 Schema（对象） ==========
+// ========== Schema（对象结构定义） ==========
 export interface Schema {
   type: 'object' | 'array'
   title?: string
@@ -100,17 +94,48 @@ export interface Schema {
   properties: Record<string, Field>
   order?: string[]
   groups?: FieldGroup[]
-  tools?: Tool[]
-  semantic?: SemanticType  // Schema 语义类型（用于区块识别）
+  semantic?: SemanticType
 }
 
-// ========== 树节点 ==========
-export interface TreeNode {
-  title: string
-  icon?: string
-  content?: string | Record<string, any>
-  children?: TreeNode[]
-  _loaded?: boolean
+// ========== 工具描述（核心） ==========
+/**
+ * 工具描述 - 所有接口返回的统一格式
+ *
+ * 核心理念：
+ * - 每个接口返回的都是工具的描述
+ * - in: 输入参数（调用工具需要什么）- 为空表示无需输入，即"数据工具"
+ * - out: 输出描述（工具返回什么）- 描述返回数据的结构
+ * - tools: 可执行的后续操作列表
+ *
+ * 示例：
+ * 1. 数据工具（无输入）：
+ *    { in: {}, out: { users: [...] } }
+ *    → 前端直接渲染 out 数据
+ *
+ * 2. 表单工具（有输入）：
+ *    { in: { username, password }, out: { token } }
+ *    → 前端呈现表单，提交后得到 out 数据
+ */
+export interface ToolDescriptor {
+  // 工具描述 Schema
+  _schema: {
+    // 输入参数描述（调用工具需要什么）
+    // 空对象或无此字段 = 无需输入 = 数据工具
+    in?: Schema | Record<string, Field>
+    
+    // 输出描述（工具返回什么数据）
+    // 描述返回数据的结构
+    out: Schema | Record<string, Field>
+  }
+  
+  // 工具执行协议（如何调用）
+  protocol?: 'http' | 'navigate' | 'mcp'
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  url?: string
+  target?: string  // navigate 协议用
+  
+  // 可执行的后续操作
+  tools?: ToolDescriptor[]
 }
 
 // ========== 行动（Action） ==========
@@ -122,29 +147,7 @@ export interface Action {
   custom?: string
 }
 
-// ========== Tool 定义（简化版） ==========
-export interface Tool {
-  name: string
-  displayName?: string  // 显示名称（用于按钮文字）
-  description: string
-  parameters?: Schema
-  protocol: 'http' | 'mcp' | 'navigate'
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  url?: string
-  target?: string  // navigate 协议用
-  onSuccess?: Action[]
-  onError?: Action[]
-}
-
-// ========== Data Object ==========
-export interface DataObject {
-  [key: string]: any
-  _schema?: SchemaRef
-  _tools?: Tool[]
-  items?: DataObject[]
-}
-
-// ========== Tool Response ==========
+// ========== 工具响应 ==========
 export interface ToolResponse {
   success: boolean
   data?: any
@@ -153,4 +156,58 @@ export interface ToolResponse {
   actions?: Action[]
   navigateTo?: string
   reload?: boolean
+}
+
+// ========== 数据对象（工具返回的实际数据） ==========
+export interface DataObject {
+  [key: string]: any
+}
+
+// ========== 页面描述（接口响应） ==========
+/**
+ * 页面描述 - 服务端接口返回的统一格式
+ *
+ * 每个接口返回的都是工具描述，包含：
+ * - _schema.in: 输入参数（有值=需要表单，无值=直接展示数据）
+ * - _schema.out: 输出数据结构
+ * - 实际数据（与 out schema 对应）
+ * - tools: 后续可执行的操作
+ */
+export interface PageDescriptor extends DataObject {
+  // 工具描述 Schema
+  _schema: {
+    in?: Schema | Record<string, Field>
+    out: Schema | Record<string, Field>
+  }
+  
+  // 后续可执行的操作
+  _tools?: ToolDescriptor[]
+  
+  // 列表/集合数据
+  items?: PageDescriptor[]
+}
+
+// ========== 树节点 ==========
+export interface TreeNode {
+  title: string
+  icon?: string
+  content?: string | Record<string, any>
+  children?: TreeNode[]
+  _loaded?: boolean
+}
+
+// ========== 向后兼容：Tool 类型别名 ==========
+// v5.0 及以前版本使用 Tool 类型，v6.0 使用 ToolDescriptor
+// 为保持向后兼容，保留 Tool 类型
+export interface Tool {
+  name: string
+  displayName?: string
+  description: string
+  parameters?: Schema
+  protocol: 'http' | 'mcp' | 'navigate' | 'data'
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  url?: string
+  target?: string
+  onSuccess?: Action[]
+  onError?: Action[]
 }

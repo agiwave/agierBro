@@ -30,30 +30,53 @@
     }
   ],
   "_schema": {
-    "type": "object",
-    "title": "评审任务",
-    "description": "我的评审任务列表",
-    "properties": {
-      "items": {
-        "type": "array",
-        "title": "任务列表",
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "评审任务",
+      "properties": {
         "items": {
-          "type": "object",
-          "_address": "/reviewer/reviews/{id}.json",
-          "properties": {
-            "id": { "type": "string", "title": "任务编号" },
-            "paper_title": { "type": "string", "title": "论文标题" },
-            "paper_author": { "type": "string", "title": "作者" },
-            "status": {
-              "type": "string",
-              "title": "状态",
-              "enum": [
-                { "value": "pending", "label": "待评审" },
-                { "value": "submitted", "label": "已提交" }
-              ]
-            },
-            "assigned_at": { "type": "string", "title": "分配时间" },
-            "due_date": { "type": "string", "title": "截止日期" }
+          "type": "array",
+          "title": "任务列表",
+          "items": {
+            "type": "object",
+            "_address": "/reviewer/reviews/{id}.json",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "任务编号"
+              },
+              "paper_title": {
+                "type": "string",
+                "title": "论文标题"
+              },
+              "paper_author": {
+                "type": "string",
+                "title": "作者"
+              },
+              "status": {
+                "type": "string",
+                "title": "状态",
+                "enum": [
+                  {
+                    "value": "pending",
+                    "label": "待评审"
+                  },
+                  {
+                    "value": "submitted",
+                    "label": "已提交"
+                  }
+                ]
+              },
+              "assigned_at": {
+                "type": "string",
+                "title": "分配时间"
+              },
+              "due_date": {
+                "type": "string",
+                "title": "截止日期"
+              }
+            }
           }
         }
       }

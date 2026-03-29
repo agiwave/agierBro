@@ -7,67 +7,76 @@
   "affiliation": "XX 大学计算机学院",
   "created_at": "2024-01-01T00:00:00Z",
   "_schema": {
-    "type": "object",
-    "title": "个人信息",
-    "properties": {
-      "id": { "type": "string", "title": "用户 ID", "readOnly": true },
-      "username": { "type": "string", "title": "用户名", "readOnly": true },
-      "email": { "type": "string", "title": "邮箱", "readOnly": true, "semantic": "email" },
-      "role": {
-        "type": "string",
-        "title": "角色",
-        "enum": [
-          { "value": "editor", "label": "编辑" },
-          { "value": "reviewer", "label": "评审专家" }
-        ],
-        "readOnly": true
-      },
-      "avatar": { "type": "string", "title": "头像", "readOnly": true, "semantic": "image" },
-      "affiliation": { "type": "string", "title": "所在单位", "readOnly": true },
-      "created_at": { "type": "string", "format": "date-time", "title": "注册时间", "readOnly": true }
-    },
-    "tools": [
-      {
-        "type": "function",
-        "function": {
-          "name": "logout",
-          "description": "退出登录",
-          "parameters": {}
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "个人信息",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "用户 ID",
+          "readOnly": true
         },
-        "execution": {
-          "protocol": "http",
-          "http": {
-            "method": "POST",
-            "url": "/api/auth/logout"
-          }
+        "username": {
+          "type": "string",
+          "title": "用户名",
+          "readOnly": true
         },
-        "response": {
-          "onSuccess": [
-            { "type": "navigate", "target": "/auth/login" },
-            { "type": "reload" }
-          ]
-        }
-      },
-      {
-        "type": "function",
-        "function": {
-          "name": "edit_profile",
-          "description": "编辑资料",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "email": { "type": "string" },
-              "affiliation": { "type": "string" }
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "readOnly": true,
+          "semantic": "email"
+        },
+        "role": {
+          "type": "string",
+          "title": "角色",
+          "enum": [
+            {
+              "value": "editor",
+              "label": "编辑"
+            },
+            {
+              "value": "reviewer",
+              "label": "评审专家"
             }
-          }
+          ],
+          "readOnly": true
         },
-        "execution": {
-          "protocol": "navigate",
-          "navigate": {
-            "target": "/auth/profile/edit"
-          }
+        "avatar": {
+          "type": "string",
+          "title": "头像",
+          "readOnly": true,
+          "semantic": "image"
+        },
+        "affiliation": {
+          "type": "string",
+          "title": "所在单位",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "注册时间",
+          "readOnly": true
         }
       }
-    ]
-  }
+    }
+  },
+  "_tools": [
+    {
+      "name": "",
+      "displayName": "",
+      "description": "",
+      "protocol": "navigate",
+      "target": ""
+    },
+    {
+      "name": "",
+      "displayName": "",
+      "description": "",
+      "protocol": "navigate",
+      "target": ""
+    }
+  ]
 }

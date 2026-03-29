@@ -40,25 +40,28 @@ const emit = defineEmits<{
   loadMore: []
 }>()
 
-// 获取语义类型（统一处理，所有类型平级）
+// v6.0: 从 _schema.out 获取语义类型
 const semanticType = computed<SemanticType | undefined>(() => {
   const schema = props.data._schema
-  if (typeof schema === 'string') {
-    // 兼容旧格式：_schema: "nav"
-    return schema as SemanticType
-  }
-  if (schema && typeof schema === 'object') {
-    // 标准格式：_schema: { type: 'object', semantic: 'nav' }
-    return (schema as Schema).semantic
+  if (!schema || typeof schema !== 'object') return undefined
+  
+  // v6.0 格式：_schema: { in: {...}, out: { semantic: 'nav', ... } }
+  const out = schema.out
+  if (out && typeof out === 'object') {
+    return (out as Schema).semantic
   }
   return undefined
 })
 
-// 获取数据的 Schema（用于通用区块渲染）
+// v6.0: 从 _schema.out 获取数据的 Schema
 const dataSchema = computed<Schema | undefined>(() => {
   const schema = props.data._schema
-  if (schema && typeof schema === 'object' && schema.type === 'object') {
-    return schema as Schema
+  if (!schema || typeof schema !== 'object') return undefined
+  
+  // v6.0 格式：_schema: { in: {...}, out: { type: 'object', ... } }
+  const out = schema.out
+  if (out && typeof out === 'object' && (out as Schema).type === 'object') {
+    return out as Schema
   }
   return undefined
 })

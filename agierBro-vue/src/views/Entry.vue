@@ -17,7 +17,7 @@
     </div>
 
     <!-- 空状态 -->
-    <div v-else-if="!data" class="empty-state">
+    <div v-else-if="!pageData" class="empty-state">
       <div class="empty-icon">📭</div>
       <h2>暂无数据</h2>
       <p>API: {{ apiUrl }}</p>
@@ -28,29 +28,29 @@
       <!-- 后台首页：有 menu 字段的对象 -->
       <DashboardLayout
         v-if="isDashboard"
-        :data="data"
+        :data="pageData"
       />
 
       <!-- Section 列表：items 数组且每个元素都有独立的 _schema -->
       <SectionList
         v-else-if="isSectionList"
-        :items="(data.items || []) as DataObject[]"
+        :items="(pageData.items || []) as DataObject[]"
       />
 
       <!-- 列表数据：使用统一 ListRenderer -->
       <ListRenderer
         v-else-if="isItemList"
-        :schema="schema"
-        :data="data as DataObject"
+        :schema="outSchema"
+        :data="pageData as DataObject"
         @itemClick="handleItemClick"
         @toolExecuted="handleToolExecuted"
       />
 
       <!-- 详情/表单数据：使用统一 SchemaRenderer -->
       <SchemaRenderer
-        v-else-if="data && schema"
-        :schema="schema"
-        :data="data"
+        v-else-if="pageData && currentSchema"
+        :schema="currentSchema"
+        :data="displayData"
         :mode="mode"
         @submit="handleSubmit"
         @toolExecuted="handleToolExecuted"
@@ -61,8 +61,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { Schema, DataObject, Tool, ToolResponse } from '@/types'
-import { extractSchema, fetchPageData } from '@/services/api'
+import type { Schema, DataObject, ToolDescriptor, ToolResponse, PageDescriptor } from '@/types'
+import { extractOutSchema, extractInSchema, fetchPageData, needsInput, executeTool } from '@/services/api'
 import { getUrlApiMapping } from '@/router'
 import { useAppStore } from '@/stores/app'
 import ListRenderer from '@/components/ListRenderer.vue'
@@ -78,35 +78,49 @@ const appStore = useAppStore()
 const loading = ref(true)
 const error = ref('')
 const apiUrl = ref('')
-const schema = ref<Schema | null>(null)
-const data = ref<DataObject | null>(null)
+const outSchema = ref<Schema | null>(null)
+const inSchema = ref<Schema | null>(null)
+const pageData = ref<PageDescriptor | null>(null)
 const formData = ref<DataObject>({})
 const mode = ref<'view' | 'edit'>('view')
 
-// 后台首页识别：有 menu 字段的对象（如 /editor, /reviewer）
+// 后台首页识别：有 menu 字段的对象
 const isDashboard = computed(() => {
-  return data.value?.menu && Array.isArray(data.value.menu)
+  return pageData.value?.menu && Array.isArray(pageData.value.menu)
 })
 
-// Section 列表识别：items 数组且每个元素都有独立的 _schema（用于页面区块）
+// Section 列表识别
 const isSectionList = computed(() => {
-  const items = data.value?.items
+  const items = pageData.value?.items
   if (!items || items.length === 0) return false
-  // 所有元素都有 _schema 字段，说明是 Section 列表
   return items.every((item: any) => item._schema)
 })
 
-// 普通列表识别：items 数组但元素没有独立 _schema（用于数据列表）
+// 普通列表识别
 const isItemList = computed(() => {
-  const items = data.value?.items
+  const items = pageData.value?.items
   if (!items || items.length === 0) return false
-  // 元素没有 _schema 字段，说明是普通数据列表
   return !items.every((item: any) => item._schema)
 })
 
-const tools = computed<Tool[]>(() => {
-  const s = schema.value as any
-  return s?.tools || []
+// 当前使用的 Schema
+// - 如果是数据工具（无输入），使用 outSchema 展示数据
+// - 如果是表单工具（有输入），使用 inSchema 呈现表单
+const currentSchema = computed<Schema | null>(() => {
+  if (mode.value === 'edit') {
+    return inSchema.value
+  }
+  return outSchema.value
+})
+
+// 展示的数据
+// - 如果是表单模式，展示空数据或默认值（等待用户输入）
+// - 如果是数据模式，展示实际数据
+const displayData = computed<DataObject>(() => {
+  if (mode.value === 'edit') {
+    return formData.value
+  }
+  return pageData.value as DataObject
 })
 
 function computeApiUrl(): string {
@@ -116,29 +130,57 @@ function computeApiUrl(): string {
 /**
  * 加载数据
  *
- * Server 驱动认证方案：
- * - 未登录：Server 返回登录表单 Schema，App 自动渲染
- * - 无权限：Server 返回 403 提示 Schema，App 自动渲染
- * - 正常：Server 返回业务数据，App 自动渲染
- * App 端不判断认证状态，只负责渲染 Server 返回的数据
+ * 一切皆工具描述架构：
+ * - 每个接口返回的都是工具的描述
+ * - in: 输入参数（有值=需要表单，无值=直接展示数据）
+ * - out: 输出数据结构
+ *
+ * 前端判断逻辑：
+ * - 有 in 且包含 required 字段 → 呈现表单（edit 模式）
+ * - 无 in 或 in 为空 → 展示数据（view 模式）
+ *
+ * 统一路由规则：
+ * - / → /api/index.json
+ * - /xxx/yyy/zzz → /api/xxx/yyy/zzz.json
  */
 async function loadData() {
   loading.value = true
   error.value = ''
-  data.value = null
-  schema.value = null
+  pageData.value = null
+  outSchema.value = null
+  inSchema.value = null
   mode.value = 'view'
+  formData.value = {}
 
   try {
     apiUrl.value = computeApiUrl()
-    const entity = route.path.replace(/^\//, '') || 'index'
-    const result = await fetchPageData(entity)
-    data.value = result
-    schema.value = extractSchema(result)
-    formData.value = { ...result }
+    
+    // 统一路由规则：直接使用 route.path
+    // / → index
+    // /users → users
+    // /users/001 → users/001
+    // /users/001/edit → users/001/edit
+    const apiPath = route.path === '/' ? 'index' : route.path.replace(/^\//, '')
+    
+    const result = await fetchPageData(apiPath)
+    pageData.value = result
+    outSchema.value = extractOutSchema(result)
+    inSchema.value = extractInSchema(result)
+    
+    // 判断是否需要输入
+    if (needsInput(result)) {
+      mode.value = 'edit'   // 需要输入，呈现表单
+      // 初始化表单数据
+      if (inSchema.value?.properties) {
+        Object.keys(inSchema.value.properties).forEach(key => {
+          const prop = inSchema.value!.properties[key]
+          formData.value[key] = prop.default !== undefined ? prop.default : ''
+        })
+      }
+    } else {
+      mode.value = 'view'  // 无需输入，展示数据
+    }
   } catch (e) {
-    // Server 返回 401/403 时也会返回数据（登录表单/权限提示）
-    // 只有网络错误等才会进入这里
     error.value = e instanceof Error ? e.message : '未知错误'
   } finally {
     loading.value = false
@@ -163,7 +205,7 @@ async function handleToolExecuted(result: ToolResponse) {
     }
   }
 
-  // 向后兼容：处理旧字段
+  // 向后兼容
   if (result.navigateTo) router.push(result.navigateTo)
   if (result.reload) await loadData()
   if (result.message && !result.actions) {
@@ -173,7 +215,23 @@ async function handleToolExecuted(result: ToolResponse) {
 
 async function handleSubmit() {
   console.log('Submit:', formData.value)
-  appStore.showSuccess('保存成功')
+  
+  // 一切皆工具描述架构下，提交表单就是调用工具
+  // 工具信息从 pageData 中获取
+  if (pageData.value) {
+    const tool: ToolDescriptor = {
+      _schema: pageData.value._schema,
+      protocol: 'http',
+      method: 'POST',
+      url: apiUrl.value.replace('/api/', '/api/').replace('.json', '.json'),
+      tools: pageData.value._tools
+    }
+    
+    const result = await executeTool(tool, formData.value)
+    await handleToolExecuted(result)
+  } else {
+    appStore.showSuccess('保存成功')
+  }
 }
 
 function handleItemClick(url: string) {

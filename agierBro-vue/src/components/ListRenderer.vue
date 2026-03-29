@@ -86,13 +86,18 @@ const emit = defineEmits<{
 
 const items = computed<DataObject[]>(() => props.data?.items || [])
 
-// 获取 item 的 Schema
+// 获取 item 的 Schema (v6.0: 从 _schema.out 读取)
 const itemSchema = computed<Schema | null>(() => {
-  const propsSchema = props.schema?.properties?.items as any
-  if (propsSchema?.items?.properties) {
-    return {
-      type: 'object',
-      properties: propsSchema.items.properties
+  const items = props.data?.items
+  if (!items || items.length === 0) return null
+  
+  // v6.0: 从第一个 item 的 _schema.out 获取
+  const firstItem = items[0]
+  const schema = firstItem._schema
+  if (schema && typeof schema === 'object' && 'out' in schema) {
+    const out = schema.out
+    if (out && typeof out === 'object') {
+      return out as Schema
     }
   }
   return null

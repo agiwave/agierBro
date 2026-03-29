@@ -3,8 +3,11 @@
   "items": [
     {
       "_schema": {
-        "type": "object",
-        "semantic": "nav"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "nav"
+        }
       },
       "icon": "🏠",
       "title": "AgierBro",
@@ -14,13 +17,17 @@
         { "title": "认证", "url": "/auth" },
         { "title": "编辑后台", "url": "/editor" },
         { "title": "专家后台", "url": "/reviewer" },
-        { "title": "测试", "url": "/test" }
+        { "title": "测试", "url": "/test" },
+        { "title": "用户管理", "url": "/users" }
       ]
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "hero"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "hero"
+        }
       },
       "icon": "🚀",
       "title": "AgierBro",
@@ -33,8 +40,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "stats"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "stats"
+        }
       },
       "title": "快速统计",
       "items": [
@@ -46,8 +56,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "features"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "features"
+        }
       },
       "title": "核心特性",
       "items": [
@@ -85,8 +98,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "content"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "content"
+        }
       },
       "icon": "📖",
       "title": "设计理念",
@@ -102,8 +118,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "cta"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "cta"
+        }
       },
       "title": "准备开始？",
       "description": "立即体验数据驱动的 UI 开发方式",
@@ -114,8 +133,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "footer"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "footer"
+        }
       },
       "text": "© 2026 AgierBro. MIT License.",
       "links": [
@@ -125,13 +147,16 @@
     }
   ],
   "_schema": {
-    "type": "object",
-    "title": "首页",
-    "properties": {
-      "title": { "type": "string", "title": "标题" },
-      "items": {
-        "type": "array",
-        "title": "页面区块"
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "首页",
+      "properties": {
+        "title": { "type": "string", "title": "标题" },
+        "items": {
+          "type": "array",
+          "title": "页面区块"
+        }
       }
     }
   }

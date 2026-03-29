@@ -8,8 +8,24 @@
     "token": "mock-token-12345"
   },
   "actions": [
-    { "type": "message", "message": "登录成功", "level": "success" },
-    { "type": "navigate", "target": "/" },
-    { "type": "reload" }
-  ]
+    {
+      "type": "message",
+      "message": "登录成功",
+      "level": "success"
+    },
+    {
+      "type": "navigate",
+      "target": "/"
+    },
+    {
+      "type": "reload"
+    }
+  ],
+  "_schema": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "properties": {}
+    }
+  }
 }

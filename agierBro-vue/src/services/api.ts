@@ -1,5 +1,7 @@
 /**
- * 增强的 API 服务
+ * 增强的 API 服务 v3
+ *
+ * 核心设计理念：一切皆工具描述
  *
  * 功能：
  * - 自动携带 Token
@@ -7,9 +9,10 @@
  * - 自动重试（指数退避）
  * - 超时处理
  * - 统一错误处理
+ * - 基于 in/out 的工具调用
  */
 
-import type { Schema, DataObject } from '@/types'
+import type { Schema, DataObject, ToolDescriptor, ToolResponse, Action, PageDescriptor, Field } from '@/types'
 import { getToken } from './auth'
 import { handleNetworkError, handleHttpError } from './errorHandler'
 
@@ -31,7 +34,7 @@ const cache = new Map<string, { data: any; timestamp: number }>()
 /**
  * 请求选项接口
  */
-interface RequestOptions {
+export interface RequestOptions {
   method?: string
   body?: any
   headers?: Record<string, string>
@@ -261,27 +264,186 @@ export async function del<T>(url: string, options?: Omit<RequestOptions, 'method
 }
 
 /**
- * 获取页面数据
+ * 获取页面数据（工具描述）
+ * 
+ * 一切皆工具描述：
+ * - 每个接口返回的都是工具的描述
+ * - in: 输入参数（有值=需要表单，无值=直接展示数据）
+ * - out: 输出数据结构
+ * 
+ * 统一路由规则：
+ * - / → /api/index.json
+ * - /xxx/yyy/zzz → /api/xxx/yyy/zzz.json
  */
-export async function fetchPageData(entity: string, id?: string): Promise<DataObject> {
-  const url = id ? `/api/${entity}/${id}.json` : `/api/${entity}.json`
-  console.log('[API] Fetch:', url)
-  return get<DataObject>(url)
+export async function fetchPageData(path: string): Promise<PageDescriptor> {
+  const url = `/api/${path}.json`
+  console.log('[API] Fetch page:', url)
+  return get<PageDescriptor>(url)
 }
 
 /**
- * 提取 Schema
+ * 提取输出 Schema
  */
-export function extractSchema(data: DataObject): Schema | null {
-  const ref = data._schema
-  if (!ref) return null
-  if (typeof ref === 'object') return ref as Schema
-  // 内置 Schema 字符串（@nav, @tree, @tabs, @content, @link）
-  if (ref.startsWith('@')) {
-    return { type: 'object', properties: {} }
+export function extractOutSchema(data: PageDescriptor): Schema | null {
+  const schema = data._schema
+  if (!schema) return null
+  
+  const out = schema.out
+  if (!out) return null
+  if (typeof out === 'object' && out.type) return out as Schema
+  
+  // 转换为标准 Schema
+  return {
+    type: 'object',
+    properties: out as Record<string, Field>
   }
-  console.warn('Schema reference not supported:', ref)
-  return null
+}
+
+/**
+ * 提取输入 Schema
+ */
+export function extractInSchema(data: PageDescriptor): Schema | null {
+  const schema = data._schema
+  if (!schema) return null
+  
+  const input = schema.in
+  if (!input) return null
+  if (typeof input === 'object' && input.type) return input as Schema
+  
+  // 转换为标准 Schema
+  return {
+    type: 'object',
+    properties: input as Record<string, Field>
+  }
+}
+
+/**
+ * 判断是否需要输入（有输入参数 = 需要表单）
+ * 
+ * 核心判断逻辑：
+ * - in 为空或无 in 字段 → 数据工具 → 直接展示数据
+ * - in 有定义且包含 required 字段 → 表单工具 → 呈现表单
+ */
+export function needsInput(data: PageDescriptor): boolean {
+  const schema = data._schema
+  if (!schema) return false
+  
+  const input = schema.in
+  if (!input) return false
+  
+  // 检查是否有必填字段
+  if (typeof input === 'object') {
+    const props = input.properties || input as Record<string, Field>
+    return Object.values(props).some(f => f.required === true)
+  }
+  
+  return false
+}
+
+/**
+ * 判断是否是数据工具（无需输入）
+ */
+export function isDataTool(data: PageDescriptor): boolean {
+  return !needsInput(data)
+}
+
+/**
+ * 执行工具调用
+ */
+export async function executeTool(
+  tool: ToolDescriptor,
+  inputData?: Record<string, any>
+): Promise<ToolResponse> {
+  console.log('[API] Execute tool:', tool, inputData)
+
+  try {
+    let result: ToolResponse
+
+    switch (tool.protocol) {
+      case 'http': {
+        // HTTP 协议工具
+        const options: RequestOptions = {
+          method: tool.method || 'POST',
+          body: inputData
+        }
+
+        if (!tool.url) {
+          throw new Error('Tool URL is required for HTTP protocol')
+        }
+
+        const responseData = await request<any>(tool.url, options)
+        
+        result = {
+          success: true,
+          data: responseData,
+          actions: tool.tools?.[0]?.tools ? [] : []
+        }
+        break
+      }
+
+      case 'navigate': {
+        // 导航协议工具
+        result = {
+          success: true,
+          actions: [{
+            type: 'navigate',
+            target: tool.target
+          }]
+        }
+        break
+      }
+
+      default:
+        throw new Error(`Unsupported protocol: ${tool.protocol}`)
+    }
+
+    return result
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return {
+      success: false,
+      error: errorMessage,
+      message: errorMessage
+    }
+  }
+}
+
+/**
+ * 执行动作
+ */
+export async function executeAction(
+  action: Action,
+  callbacks?: {
+    onNavigate?: (target: string) => void
+    onReload?: () => Promise<void>
+    onBack?: () => void
+    onMessage?: (message: string, level: string) => void
+  }
+): Promise<void> {
+  console.log('[API] Execute action:', action)
+
+  switch (action.type) {
+    case 'navigate':
+      if (action.target && callbacks?.onNavigate) {
+        callbacks.onNavigate(action.target)
+      }
+      break
+    case 'reload':
+      if (callbacks?.onReload) {
+        await callbacks.onReload()
+      }
+      break
+    case 'back':
+      if (callbacks?.onBack) {
+        callbacks.onBack()
+      }
+      break
+    case 'message':
+      if (action.message && callbacks?.onMessage) {
+        callbacks.onMessage(action.message, action.level || 'info')
+      }
+      break
+  }
 }
 
 /**

@@ -1,7 +1,19 @@
 {
   "success": true,
   "message": "用户信息已更新",
-  "user": { "id": "user-001", "username": "admin", "email": "admin@example.com", "updated_at": "2024-03-18T12:00:00Z" },
+  "user": {
+    "id": "user-001",
+    "username": "admin",
+    "email": "admin@example.com",
+    "updated_at": "2024-03-18T12:00:00Z"
+  },
   "_reload": true,
-  "_message": "保存成功！"
+  "_message": "保存成功！",
+  "_schema": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "properties": {}
+    }
+  }
 }

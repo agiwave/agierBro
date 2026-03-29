@@ -1,18 +1,19 @@
 /**
- * 通用数据源地址映射器
+ * 通用数据源地址映射器 v3
  *
- * 核心设计理念：极简主义
+ * 核心设计理念：统一分形结构
  *
- * 映射规则（只有两条）：
- * 1. / → /api/index.json
- * 2. 其他所有路径 /xxx → /api/xxx.json（无论多少级）
+ * 映射规则（只有一条）：
+ * - /xxx/yyy/zzz → /api/xxx/yyy/zzz.json
  *
  * 示例：
  * - /                    → /api/index.json
  * - /users               → /api/users.json
  * - /users/001           → /api/users/001.json
+ * - /users/001/edit      → /api/users/001/edit.json
  * - /editor/papers       → /api/editor/papers.json
  * - /editor/papers/001   → /api/editor/papers/001.json
+ * - /editor/papers/001/edit → /api/editor/papers/001/edit.json
  */
 
 // ========== 类型定义 ==========
@@ -83,7 +84,7 @@ class DataSourceMapper {
       return exactMatch.target
     }
 
-    // 4. 默认规则：/xxx → /api/xxx.json
+    // 4. 默认规则：/xxx/yyy/zzz → /api/xxx/yyy/zzz.json
     return this.applyDefaultRule(cleanPath)
   }
 
@@ -122,7 +123,9 @@ class DataSourceMapper {
   }
 
   /**
-   * 应用默认规则：/xxx → /api/xxx.json
+   * 应用默认规则：/xxx/yyy/zzz → /api/xxx/yyy/zzz.json
+   *
+   * 统一分形规则：所有路径都直接映射到同路径的 .json 文件
    */
   private applyDefaultRule(cleanPath: string): string {
     const { apiBase, extension } = this.config
@@ -152,11 +155,11 @@ export function getMapper(): DataSourceMapper {
 }
 
 /**
- * 映射前端 URL 到后端数据源地址（极简规则）
+ * 映射前端 URL 到后端数据源地址（统一分形规则）
  *
  * 规则：
- * 1. / → /api/index.json
- * 2. /xxx → /api/xxx.json（无论多少级）
+ * - / → /api/index.json
+ * - /xxx/yyy/zzz → /api/xxx/yyy/zzz.json
  *
  * @param path - 前端 URL 路径
  * @returns 后端数据源地址

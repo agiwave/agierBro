@@ -7,36 +7,86 @@
     "active_reviewers": 45
   },
   "menu": [
-    { "icon": "📄", "title": "论文管理", "url": "/editor/papers", "description": "管理所有投稿论文" },
-    { "icon": "📋", "title": "评审管理", "url": "/editor/reviews", "description": "跟踪评审进度" },
-    { "icon": "👥", "title": "专家管理", "url": "/editor/reviewers", "description": "管理评审专家库" },
-    { "icon": "📊", "title": "统计分析", "url": "/editor/stats", "description": "查看数据统计" }
+    {
+      "icon": "📄",
+      "title": "论文管理",
+      "url": "/editor/papers",
+      "description": "管理所有投稿论文"
+    },
+    {
+      "icon": "📋",
+      "title": "评审管理",
+      "url": "/editor/reviews",
+      "description": "跟踪评审进度"
+    },
+    {
+      "icon": "👥",
+      "title": "专家管理",
+      "url": "/editor/reviewers",
+      "description": "管理评审专家库"
+    },
+    {
+      "icon": "📊",
+      "title": "统计分析",
+      "url": "/editor/stats",
+      "description": "查看数据统计"
+    }
   ],
   "_schema": {
-    "type": "object",
-    "title": "编辑后台",
-    "properties": {
-      "title": { "type": "string", "title": "标题" },
-      "description": { "type": "string", "title": "描述" },
-      "quick_stats": {
-        "type": "object",
-        "title": "快速统计",
-        "properties": {
-          "total_papers": { "type": "integer", "title": "总论文数" },
-          "pending_review": { "type": "integer", "title": "待评审数" },
-          "active_reviewers": { "type": "integer", "title": "活跃专家数" }
-        }
-      },
-      "menu": {
-        "type": "array",
-        "title": "菜单",
-        "items": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "编辑后台",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "标题"
+        },
+        "description": {
+          "type": "string",
+          "title": "描述"
+        },
+        "quick_stats": {
           "type": "object",
+          "title": "快速统计",
           "properties": {
-            "icon": { "type": "string", "title": "图标" },
-            "title": { "type": "string", "title": "标题" },
-            "url": { "type": "string", "title": "链接" },
-            "description": { "type": "string", "title": "描述" }
+            "total_papers": {
+              "type": "integer",
+              "title": "总论文数"
+            },
+            "pending_review": {
+              "type": "integer",
+              "title": "待评审数"
+            },
+            "active_reviewers": {
+              "type": "integer",
+              "title": "活跃专家数"
+            }
+          }
+        },
+        "menu": {
+          "type": "array",
+          "title": "菜单",
+          "items": {
+            "type": "object",
+            "properties": {
+              "icon": {
+                "type": "string",
+                "title": "图标"
+              },
+              "title": {
+                "type": "string",
+                "title": "标题"
+              },
+              "url": {
+                "type": "string",
+                "title": "链接"
+              },
+              "description": {
+                "type": "string",
+                "title": "描述"
+              }
+            }
           }
         }
       }

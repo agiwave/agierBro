@@ -1,0 +1,83 @@
+{
+  "id": "order-001",
+  "order_no": "ORD-2026-001",
+  "customer": "张三",
+  "amount": 1299.0,
+  "status": "pending",
+  "created_at": "2026-03-25T10:00:00Z",
+  "_schema": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "订单详情",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "ID"
+        },
+        "order_no": {
+          "type": "string",
+          "title": "订单号"
+        },
+        "customer": {
+          "type": "string",
+          "title": "客户"
+        },
+        "amount": {
+          "type": "number",
+          "title": "金额",
+          "format": "currency"
+        },
+        "status": {
+          "type": "string",
+          "title": "状态",
+          "enum": [
+            {
+              "value": "pending",
+              "label": "待处理",
+              "color": "yellow"
+            },
+            {
+              "value": "approved",
+              "label": "已批准",
+              "color": "green"
+            },
+            {
+              "value": "rejected",
+              "label": "已拒绝",
+              "color": "red"
+            }
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "title": "创建时间",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "_tools": [
+    {
+      "name": "approve",
+      "displayName": "批准",
+      "description": "批准此订单",
+      "protocol": "navigate",
+      "target": "/orders/order-001/approve"
+    },
+    {
+      "name": "reject",
+      "displayName": "拒绝",
+      "description": "拒绝此订单",
+      "protocol": "navigate",
+      "target": "/orders/order-001/reject"
+    },
+    {
+      "name": "back",
+      "displayName": "返回",
+      "description": "返回订单列表",
+      "protocol": "navigate",
+      "target": "/orders"
+    }
+  ]
+}

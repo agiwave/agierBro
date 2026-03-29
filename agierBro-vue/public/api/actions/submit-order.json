@@ -1,1 +1,18 @@
-{ "success": true, "message": "订单已提交审核", "order": { "id": "ORD-001", "status": "pending", "updated_at": "2024-03-18T10:00:00Z" }, "_reload": true, "_message": "订单已提交审核，等待审批" }
+{
+  "success": true,
+  "message": "订单已提交审核",
+  "order": {
+    "id": "ORD-001",
+    "status": "pending",
+    "updated_at": "2024-03-18T10:00:00Z"
+  },
+  "_reload": true,
+  "_message": "订单已提交审核，等待审批",
+  "_schema": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+}

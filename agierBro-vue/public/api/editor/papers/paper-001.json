@@ -2,7 +2,13 @@
   "id": "paper-001",
   "title": "基于深度学习的图像识别研究",
   "abstract": "本文提出了一种新的基于深度学习的图像识别方法。该方法结合了卷积神经网络（CNN）和注意力机制，能够有效提升图像识别的准确率和效率。通过在 ImageNet 数据集上的实验验证，我们的方法在 top-1 准确率上达到了 85.6%，相比基线模型提升了 3.2 个百分点。",
-  "keywords": ["深度学习", "图像识别", "CNN", "注意力机制", "卷积神经网络"],
+  "keywords": [
+    "深度学习",
+    "图像识别",
+    "CNN",
+    "注意力机制",
+    "卷积神经网络"
+  ],
   "author_name": "张三",
   "author_email": "zhangsan@example.com",
   "author_affiliation": "XX 大学计算机学院",
@@ -16,125 +22,134 @@
   "reviewer": null,
   "reviews": [],
   "_schema": {
-    "type": "object",
-    "title": "论文详情",
-    "description": "查看论文详细信息并分配评审专家",
-    "order": ["id", "title", "abstract", "keywords", "author_name", "author_email", "author_affiliation", "status", "submitted_at", "file", "reviewer", "reviews"],
-    "properties": {
-      "id": { "type": "string", "title": "编号", "readOnly": true },
-      "title": { "type": "string", "title": "标题", "readOnly": true },
-      "abstract": { "type": "string", "title": "摘要", "readOnly": true },
-      "keywords": { "type": "array", "title": "关键词", "items": { "type": "string" }, "readOnly": true },
-      "author_name": { "type": "string", "title": "作者", "readOnly": true },
-      "author_email": { "type": "string", "title": "邮箱", "readOnly": true },
-      "author_affiliation": { "type": "string", "title": "单位", "readOnly": true },
-      "status": { "type": "string", "title": "状态", "readOnly": true },
-      "submitted_at": { "type": "string", "format": "date-time", "title": "提交时间", "readOnly": true },
-      "file": {
-        "type": "object",
-        "title": "论文附件",
-        "readOnly": true,
-        "properties": {
-          "name": { "type": "string", "title": "文件名" },
-          "size": { "type": "number", "title": "文件大小" },
-          "url": { "type": "string", "title": "下载链接" }
-        }
-      },
-      "reviewer": { "type": "string", "title": "评审专家", "readOnly": true },
-      "reviews": {
-        "type": "array",
-        "title": "评审意见",
-        "items": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "论文详情",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "编号",
+          "readOnly": true
+        },
+        "title": {
+          "type": "string",
+          "title": "标题",
+          "readOnly": true
+        },
+        "abstract": {
+          "type": "string",
+          "title": "摘要",
+          "readOnly": true
+        },
+        "keywords": {
+          "type": "array",
+          "title": "关键词",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        },
+        "author_name": {
+          "type": "string",
+          "title": "作者",
+          "readOnly": true
+        },
+        "author_email": {
+          "type": "string",
+          "title": "邮箱",
+          "readOnly": true
+        },
+        "author_affiliation": {
+          "type": "string",
+          "title": "单位",
+          "readOnly": true
+        },
+        "status": {
+          "type": "string",
+          "title": "状态",
+          "readOnly": true
+        },
+        "submitted_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "提交时间",
+          "readOnly": true
+        },
+        "file": {
           "type": "object",
+          "title": "论文附件",
+          "readOnly": true,
           "properties": {
-            "reviewer": { "type": "string", "title": "评审人" },
-            "content": { "type": "string", "title": "评审意见" },
-            "recommendation": { "type": "string", "title": "结论" },
-            "created_at": { "type": "string", "title": "时间" }
+            "name": {
+              "type": "string",
+              "title": "文件名"
+            },
+            "size": {
+              "type": "number",
+              "title": "文件大小"
+            },
+            "url": {
+              "type": "string",
+              "title": "下载链接"
+            }
           }
         },
-        "readOnly": true
-      }
-    },
-    "tools": [
-      {
-        "type": "function",
-        "function": {
-          "name": "assign_reviewer",
-          "description": "分配评审专家",
-          "parameters": {
+        "reviewer": {
+          "type": "string",
+          "title": "评审专家",
+          "readOnly": true
+        },
+        "reviews": {
+          "type": "array",
+          "title": "评审意见",
+          "items": {
             "type": "object",
             "properties": {
-              "reviewer_id": {
+              "reviewer": {
                 "type": "string",
-                "title": "评审专家",
-                "enum": [
-                  { "value": "reviewer-001", "label": "王五 (XX 大学)" },
-                  { "value": "reviewer-002", "label": "赵六 (YY 研究所)" },
-                  { "value": "reviewer-003", "label": "孙九 (ZZ 研究中心)" }
-                ]
+                "title": "评审人"
+              },
+              "content": {
+                "type": "string",
+                "title": "评审意见"
+              },
+              "recommendation": {
+                "type": "string",
+                "title": "结论"
+              },
+              "created_at": {
+                "type": "string",
+                "title": "时间"
               }
-            },
-            "required": ["reviewer_id"]
-          }
-        },
-        "execution": {
-          "protocol": "http",
-          "http": {
-            "method": "POST",
-            "url": "/api/editor/papers/paper-001/assign"
-          }
-        },
-        "response": {
-          "onSuccess": [
-            { "type": "message", "message": "分配成功", "level": "success" },
-            { "type": "reload" }
-          ]
-        }
-      },
-      {
-        "type": "function",
-        "function": {
-          "name": "download_paper",
-          "description": "下载论文",
-          "parameters": {}
-        },
-        "execution": {
-          "protocol": "http",
-          "http": {
-            "method": "GET",
-            "url": "/api/files/papers/paper-001.pdf"
-          }
-        }
-      },
-      {
-        "type": "function",
-        "function": {
-          "name": "reject_paper",
-          "description": "拒稿",
-          "description": "拒绝这篇论文",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "reason": { "type": "string", "title": "拒稿原因" }
-            },
-            "required": ["reason"]
-          }
-        },
-        "execution": {
-          "protocol": "http",
-          "http": {
-            "method": "POST",
-            "url": "/api/editor/papers/paper-001/reject"
-          }
-        },
-        "response": {
-          "onSuccess": [
-            { "type": "message", "message": "已拒稿", "level": "info" },
-            { "type": "navigate", "target": "/editor/papers" }
-          ]
+            }
+          },
+          "readOnly": true
         }
       }
-    ]
-  }
+    }
+  },
+  "_tools": [
+    {
+      "name": "",
+      "displayName": "",
+      "description": "",
+      "protocol": "navigate",
+      "target": ""
+    },
+    {
+      "name": "",
+      "displayName": "",
+      "description": "",
+      "protocol": "navigate",
+      "target": ""
+    },
+    {
+      "name": "",
+      "displayName": "",
+      "description": "",
+      "protocol": "navigate",
+      "target": ""
+    }
+  ]
 }

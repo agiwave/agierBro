@@ -37,59 +37,81 @@
     }
   ],
   "_schema": {
-    "type": "object",
-    "title": "评审管理",
-    "description": "管理所有论文的评审流程",
-    "properties": {
-      "items": {
-        "type": "array",
-        "title": "评审列表",
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "评审管理",
+      "properties": {
         "items": {
-          "type": "object",
-          "_address": "/editor/reviews/{id}.json",
-          "properties": {
-            "id": { "type": "string", "title": "评审编号" },
-            "paper_title": { "type": "string", "title": "论文标题" },
-            "reviewer": { "type": "string", "title": "评审专家" },
-            "reviewer_email": { "type": "string", "title": "邮箱" },
-            "status": {
-              "type": "string",
-              "title": "状态",
-              "enum": [
-                { "value": "pending", "label": "待评审" },
-                { "value": "submitted", "label": "已提交" },
-                { "value": "reviewed", "label": "已评审" }
-              ]
-            },
-            "assigned_at": { "type": "string", "title": "分配时间" },
-            "due_date": { "type": "string", "title": "截止日期" },
-            "submitted_at": { "type": "string", "title": "提交时间" },
-            "remind_count": { "type": "integer", "title": "提醒次数" }
+          "type": "array",
+          "title": "评审列表",
+          "items": {
+            "type": "object",
+            "_address": "/editor/reviews/{id}.json",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "评审编号"
+              },
+              "paper_title": {
+                "type": "string",
+                "title": "论文标题"
+              },
+              "reviewer": {
+                "type": "string",
+                "title": "评审专家"
+              },
+              "reviewer_email": {
+                "type": "string",
+                "title": "邮箱"
+              },
+              "status": {
+                "type": "string",
+                "title": "状态",
+                "enum": [
+                  {
+                    "value": "pending",
+                    "label": "待评审"
+                  },
+                  {
+                    "value": "submitted",
+                    "label": "已提交"
+                  },
+                  {
+                    "value": "reviewed",
+                    "label": "已评审"
+                  }
+                ]
+              },
+              "assigned_at": {
+                "type": "string",
+                "title": "分配时间"
+              },
+              "due_date": {
+                "type": "string",
+                "title": "截止日期"
+              },
+              "submitted_at": {
+                "type": "string",
+                "title": "提交时间"
+              },
+              "remind_count": {
+                "type": "integer",
+                "title": "提醒次数"
+              }
+            }
           }
         }
       }
-    },
-    "tools": [
-      {
-        "type": "function",
-        "function": {
-          "name": "export_reviews",
-          "description": "导出评审数据",
-          "parameters": {}
-        },
-        "execution": {
-          "protocol": "http",
-          "http": {
-            "method": "GET",
-            "url": "/api/editor/reviews/export"
-          }
-        },
-        "response": {
-          "onSuccess": [
-            { "type": "message", "message": "导出成功", "level": "success" }
-          ]
-        }
-      }
-    ]
-  }
+    }
+  },
+  "_tools": [
+    {
+      "name": "",
+      "displayName": "",
+      "description": "",
+      "protocol": "navigate",
+      "target": ""
+    }
+  ]
 }

@@ -7,7 +7,21 @@
     "submitted_at": "2024-03-24T10:00:00Z"
   },
   "actions": [
-    { "type": "message", "message": "评审意见已提交", "level": "success" },
-    { "type": "navigate", "target": "/reviewer/tasks" }
-  ]
+    {
+      "type": "message",
+      "message": "评审意见已提交",
+      "level": "success"
+    },
+    {
+      "type": "navigate",
+      "target": "/reviewer/tasks"
+    }
+  ],
+  "_schema": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "properties": {}
+    }
+  }
 }

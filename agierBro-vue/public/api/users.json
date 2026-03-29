@@ -10,14 +10,17 @@
       "status": "active",
       "created_at": "2026-01-15T08:00:00Z",
       "_schema": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string", "title": "ID" },
-          "username": { "type": "string", "title": "用户名" },
-          "email": { "type": "string", "title": "邮箱", "format": "email" },
-          "role": { "type": "string", "title": "角色" },
-          "status": { "type": "string", "title": "状态" },
-          "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
+        "in": {},
+        "out": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "title": "ID" },
+            "username": { "type": "string", "title": "用户名" },
+            "email": { "type": "string", "title": "邮箱", "format": "email" },
+            "role": { "type": "string", "title": "角色" },
+            "status": { "type": "string", "title": "状态" },
+            "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
+          }
         }
       },
       "_tools": [
@@ -34,18 +37,6 @@
           "description": "编辑用户",
           "protocol": "navigate",
           "target": "/users/user-001/edit"
-        },
-        {
-          "name": "delete",
-          "displayName": "删除",
-          "description": "删除用户",
-          "protocol": "http",
-          "method": "DELETE",
-          "url": "/api/users/user-001",
-          "onSuccess": [
-            { "type": "reload" },
-            { "type": "message", "message": "用户已删除", "level": "success" }
-          ]
         }
       ]
     },
@@ -57,14 +48,17 @@
       "status": "active",
       "created_at": "2026-02-01T10:30:00Z",
       "_schema": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string", "title": "ID" },
-          "username": { "type": "string", "title": "用户名" },
-          "email": { "type": "string", "title": "邮箱", "format": "email" },
-          "role": { "type": "string", "title": "角色" },
-          "status": { "type": "string", "title": "状态" },
-          "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
+        "in": {},
+        "out": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "title": "ID" },
+            "username": { "type": "string", "title": "用户名" },
+            "email": { "type": "string", "title": "邮箱", "format": "email" },
+            "role": { "type": "string", "title": "角色" },
+            "status": { "type": "string", "title": "状态" },
+            "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
+          }
         }
       },
       "_tools": [
@@ -81,18 +75,6 @@
           "description": "编辑用户",
           "protocol": "navigate",
           "target": "/users/user-002/edit"
-        },
-        {
-          "name": "delete",
-          "displayName": "删除",
-          "description": "删除用户",
-          "protocol": "http",
-          "method": "DELETE",
-          "url": "/api/users/user-002",
-          "onSuccess": [
-            { "type": "reload" },
-            { "type": "message", "message": "用户已删除", "level": "success" }
-          ]
         }
       ]
     },
@@ -104,14 +86,17 @@
       "status": "inactive",
       "created_at": "2026-02-10T14:00:00Z",
       "_schema": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string", "title": "ID" },
-          "username": { "type": "string", "title": "用户名" },
-          "email": { "type": "string", "title": "邮箱", "format": "email" },
-          "role": { "type": "string", "title": "角色" },
-          "status": { "type": "string", "title": "状态" },
-          "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
+        "in": {},
+        "out": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "title": "ID" },
+            "username": { "type": "string", "title": "用户名" },
+            "email": { "type": "string", "title": "邮箱", "format": "email" },
+            "role": { "type": "string", "title": "角色" },
+            "status": { "type": "string", "title": "状态" },
+            "created_at": { "type": "string", "title": "创建时间", "format": "date-time" }
+          }
         }
       },
       "_tools": [
@@ -128,23 +113,26 @@
           "description": "编辑用户",
           "protocol": "navigate",
           "target": "/users/user-003/edit"
-        },
-        {
-          "name": "delete",
-          "displayName": "删除",
-          "description": "删除用户",
-          "protocol": "http",
-          "method": "DELETE",
-          "url": "/api/users/user-003",
-          "onSuccess": [
-            { "type": "reload" },
-            { "type": "message", "message": "用户已删除", "level": "success" }
-          ]
         }
       ]
     }
   ],
-  "tools": [
+  "_schema": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "用户管理",
+      "properties": {
+        "title": { "type": "string", "title": "标题" },
+        "description": { "type": "string", "title": "描述" },
+        "items": {
+          "type": "array",
+          "title": "用户列表"
+        }
+      }
+    }
+  },
+  "_tools": [
     {
       "name": "create",
       "displayName": "创建用户",
@@ -152,36 +140,5 @@
       "protocol": "navigate",
       "target": "/users/create"
     }
-  ],
-  "_schema": {
-    "type": "object",
-    "title": "用户管理",
-    "properties": {
-      "title": { "type": "string", "title": "标题" },
-      "description": { "type": "string", "title": "描述" },
-      "items": {
-        "type": "array",
-        "title": "用户列表",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": { "type": "string", "title": "ID" },
-            "username": { "type": "string", "title": "用户名" },
-            "email": { "type": "string", "title": "邮箱" },
-            "role": { "type": "string", "title": "角色" },
-            "status": { "type": "string", "title": "状态" }
-          }
-        }
-      }
-    },
-    "tools": [
-      {
-        "name": "create",
-        "displayName": "创建用户",
-        "description": "添加新用户",
-        "protocol": "navigate",
-        "target": "/users/create"
-      }
-    ]
-  }
+  ]
 }

@@ -1,7 +1,11 @@
 {
   "_schema": {
-    "type": "object",
-    "semantic": "list"
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "",
+      "properties": {}
+    }
   },
   "icon": "📢",
   "title": "系统通知",
@@ -15,11 +19,20 @@
       "clickable": true,
       "meta": {
         "date": "2026-03-25",
-        "status": { "label": "进行中", "color": "warning" }
+        "status": {
+          "label": "进行中",
+          "color": "warning"
+        }
       },
       "tags": [
-        { "label": "公告", "color": "primary" },
-        { "label": "重要", "color": "error" }
+        {
+          "label": "公告",
+          "color": "primary"
+        },
+        {
+          "label": "重要",
+          "color": "error"
+        }
       ]
     },
     {
@@ -30,10 +43,16 @@
       "clickable": true,
       "meta": {
         "date": "2026-03-24",
-        "status": { "label": "已完成", "color": "success" }
+        "status": {
+          "label": "已完成",
+          "color": "success"
+        }
       },
       "tags": [
-        { "label": "功能", "color": "success" }
+        {
+          "label": "功能",
+          "color": "success"
+        }
       ]
     },
     {
@@ -44,11 +63,20 @@
       "clickable": true,
       "meta": {
         "date": "2026-03-24",
-        "status": { "label": "已完成", "color": "success" }
+        "status": {
+          "label": "已完成",
+          "color": "success"
+        }
       },
       "tags": [
-        { "label": "功能", "color": "success" },
-        { "label": "UI", "color": "primary" }
+        {
+          "label": "功能",
+          "color": "success"
+        },
+        {
+          "label": "UI",
+          "color": "primary"
+        }
       ]
     },
     {
@@ -59,10 +87,16 @@
       "clickable": true,
       "meta": {
         "date": "2026-03-24",
-        "status": { "label": "已完成", "color": "success" }
+        "status": {
+          "label": "已完成",
+          "color": "success"
+        }
       },
       "tags": [
-        { "label": "功能", "color": "success" }
+        {
+          "label": "功能",
+          "color": "success"
+        }
       ]
     },
     {
@@ -73,10 +107,16 @@
       "clickable": true,
       "meta": {
         "date": "2026-03-24",
-        "status": { "label": "已完成", "color": "success" }
+        "status": {
+          "label": "已完成",
+          "color": "success"
+        }
       },
       "tags": [
-        { "label": "功能", "color": "success" }
+        {
+          "label": "功能",
+          "color": "success"
+        }
       ]
     }
   ],

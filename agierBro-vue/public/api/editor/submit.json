@@ -3,55 +3,58 @@
   "reviewer_ids": [],
   "deadline": "",
   "_schema": {
-    "type": "object",
-    "title": "提交论文评审",
-    "description": "填写论文信息并选择评审专家",
-    "properties": {
-      "paper_id": {
-        "type": "string",
-        "title": "论文编号",
-        "description": "请输入论文编号"
-      },
-      "reviewer_ids": {
-        "type": "array",
-        "title": "评审专家",
-        "description": "选择 2-3 位评审专家",
-        "items": {
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "提交论文评审",
+      "properties": {
+        "paper_id": {
           "type": "string",
-          "enum": [
-            { "value": "REV-001", "label": "张教授 (北京大学)" },
-            { "value": "REV-002", "label": "李教授 (清华大学)" },
-            { "value": "REV-003", "label": "王教授 (浙江大学)" },
-            { "value": "REV-004", "label": "赵教授 (复旦大学)" }
-          ]
-        }
-      },
-      "deadline": {
-        "type": "date",
-        "title": "评审截止日期",
-        "description": "请选择评审截止日期"
-      }
-    },
-    "tools": [
-      {
-        "name": "submit",
-        "title": "提交评审请求",
-        "description": "提交论文评审请求",
-        "input_schema": {
-          "type": "object",
-          "properties": {
-            "paper_id": { "type": "string" },
-            "reviewer_ids": { "type": "array" },
-            "deadline": { "type": "date" }
+          "title": "论文编号",
+          "description": "请输入论文编号"
+        },
+        "reviewer_ids": {
+          "type": "array",
+          "title": "评审专家",
+          "description": "选择 2-3 位评审专家",
+          "items": {
+            "type": "string",
+            "enum": [
+              {
+                "value": "REV-001",
+                "label": "张教授 (北京大学)"
+              },
+              {
+                "value": "REV-002",
+                "label": "李教授 (清华大学)"
+              },
+              {
+                "value": "REV-003",
+                "label": "王教授 (浙江大学)"
+              },
+              {
+                "value": "REV-004",
+                "label": "赵教授 (复旦大学)"
+              }
+            ]
           }
         },
-        "protocol": "http",
-        "url": "/api/editor/submit",
-        "action": {
-          "type": "navigate",
-          "target": "/editor/papers"
+        "deadline": {
+          "type": "date",
+          "title": "评审截止日期",
+          "description": "请选择评审截止日期"
         }
       }
-    ]
-  }
+    }
+  },
+  "_tools": [
+    {
+      "name": "submit",
+      "displayName": "submit",
+      "description": "提交论文评审请求",
+      "protocol": "http",
+      "target": "/api/editor/submit",
+      "url": "/api/editor/submit"
+    }
+  ]
 }

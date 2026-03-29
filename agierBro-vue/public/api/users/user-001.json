@@ -2,96 +2,40 @@
   "id": "user-001",
   "username": "admin",
   "email": "admin@example.com",
-  "phone": "13800138000",
-  "role": "admin",
+  "role": "管理员",
   "status": "active",
-  "bio": "系统管理员，负责系统配置和用户管理。",
+  "created_at": "2026-01-15T08:00:00Z",
+  "updated_at": "2026-03-29T10:00:00Z",
   "_schema": {
-    "type": "object",
-    "title": "编辑用户",
-    "description": "修改用户信息",
-    "groups": [
-      {
-        "key": "account",
-        "title": "账户信息",
-        "fields": ["username", "email", "phone", "role", "status"]
-      },
-      {
-        "key": "profile",
-        "title": "个人资料",
-        "fields": ["bio"]
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "用户详情",
+      "properties": {
+        "id": { "type": "string", "title": "ID", "readOnly": true },
+        "username": { "type": "string", "title": "用户名" },
+        "email": { "type": "string", "title": "邮箱", "format": "email" },
+        "role": { "type": "string", "title": "角色" },
+        "status": { "type": "string", "title": "状态" },
+        "created_at": { "type": "string", "title": "创建时间", "format": "date-time" },
+        "updated_at": { "type": "string", "title": "更新时间", "format": "date-time" }
       }
-    ],
-    "properties": {
-      "id": { "type": "string", "title": "用户 ID", "readOnly": true },
-      "username": {
-        "type": "string",
-        "title": "用户名",
-        "required": true,
-        "minLength": 3,
-        "maxLength": 20
-      },
-      "email": {
-        "type": "string",
-        "title": "邮箱",
-        "required": true,
-        "format": "email"
-      },
-      "phone": {
-        "type": "string",
-        "title": "手机号",
-        "format": "phone"
-      },
-      "role": {
-        "type": "string",
-        "title": "角色",
-        "required": true,
-        "enum": [
-          { "value": "admin", "label": "管理员" },
-          { "value": "editor", "label": "编辑" },
-          { "value": "reviewer", "label": "评审" },
-          { "value": "user", "label": "普通用户" }
-        ]
-      },
-      "status": {
-        "type": "string",
-        "title": "状态",
-        "required": true,
-        "enum": [
-          { "value": "active", "label": "激活" },
-          { "value": "inactive", "label": "未激活" },
-          { "value": "suspended", "label": "已停用" }
-        ]
-      },
-      "bio": {
-        "type": "string",
-        "title": "个人简介",
-        "maxLength": 500
-      }
+    }
+  },
+  "_tools": [
+    {
+      "name": "edit",
+      "displayName": "编辑",
+      "description": "编辑用户信息",
+      "protocol": "navigate",
+      "target": "/users/user-001/edit"
     },
-    "tools": [
-      {
-        "name": "update",
-        "displayName": "保存",
-        "description": "保存修改",
-        "protocol": "http",
-        "method": "PUT",
-        "url": "/api/users/user-001",
-        "onSuccess": [
-          { "type": "message", "message": "用户已更新", "level": "success" },
-          { "type": "navigate", "target": "/users/user-001" }
-        ],
-        "onError": [
-          { "type": "message", "message": "更新失败，请重试", "level": "error" }
-        ]
-      },
-      {
-        "name": "cancel",
-        "displayName": "取消",
-        "description": "取消修改",
-        "protocol": "navigate",
-        "target": "/users/user-001"
-      }
-    ]
-  }
+    {
+      "name": "back",
+      "displayName": "返回",
+      "description": "返回用户列表",
+      "protocol": "navigate",
+      "target": "/users"
+    }
+  ]
 }

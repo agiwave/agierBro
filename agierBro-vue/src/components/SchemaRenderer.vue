@@ -104,7 +104,13 @@ const sections = computed<FieldSection[]>(() => {
 })
 
 const tools = computed<Tool[]>(() => {
-  return props.schema.tools || []
+  // v6.0: 从 _tools 获取（页面级别）
+  // v5.0 及以前：从 schema.tools 获取（向后兼容）
+  const pageTools = (props.data as any)?._tools as Tool[] | undefined
+  if (pageTools && pageTools.length > 0) {
+    return pageTools
+  }
+  return (props.schema as any).tools || []
 })
 
 watch(() => props.data, () => {

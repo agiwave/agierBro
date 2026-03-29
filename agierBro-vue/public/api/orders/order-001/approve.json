@@ -1,0 +1,53 @@
+{
+  "order_id": "order-001",
+  "order_no": "ORD-2026-001",
+  "comment": "",
+  "_schema": {
+    "in": {
+      "type": "object",
+      "title": "批准订单",
+      "properties": {
+        "order_id": {
+          "type": "string",
+          "title": "订单 ID",
+          "readOnly": true
+        },
+        "order_no": {
+          "type": "string",
+          "title": "订单号",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "title": "备注",
+          "placeholder": "请输入批准备注（可选）"
+        }
+      }
+    },
+    "out": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "title": "消息"
+        },
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      }
+    }
+  },
+  "protocol": "http",
+  "method": "POST",
+  "url": "/api/orders/order-001/approve.json",
+  "_tools": [
+    {
+      "name": "cancel",
+      "displayName": "取消",
+      "description": "取消操作",
+      "protocol": "navigate",
+      "target": "/orders/order-001"
+    }
+  ]
+}

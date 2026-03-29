@@ -38,47 +38,73 @@
     }
   ],
   "_schema": {
-    "type": "object",
-    "title": "我的通知",
-    "properties": {
-      "items": {
-        "type": "array",
-        "title": "通知列表",
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "我的通知",
+      "properties": {
         "items": {
-          "type": "object",
-          "_address": "/notifications/{id}.json",
-          "properties": {
-            "id": { "type": "string", "title": "编号" },
-            "title": { "type": "string", "title": "标题" },
-            "content": { "type": "string", "title": "内容" },
-            "type": {
-              "type": "string",
-              "title": "类型",
-              "enum": [
-                { "value": "task", "label": "任务" },
-                { "value": "reminder", "label": "提醒" },
-                { "value": "system", "label": "系统" }
-              ]
-            },
-            "read": { "type": "boolean", "title": "已读" },
-            "created_at": { "type": "string", "format": "date-time", "title": "时间" }
+          "type": "array",
+          "title": "通知列表",
+          "items": {
+            "type": "object",
+            "_address": "/notifications/{id}.json",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "编号"
+              },
+              "title": {
+                "type": "string",
+                "title": "标题"
+              },
+              "content": {
+                "type": "string",
+                "title": "内容"
+              },
+              "type": {
+                "type": "string",
+                "title": "类型",
+                "enum": [
+                  {
+                    "value": "task",
+                    "label": "任务"
+                  },
+                  {
+                    "value": "reminder",
+                    "label": "提醒"
+                  },
+                  {
+                    "value": "system",
+                    "label": "系统"
+                  }
+                ]
+              },
+              "read": {
+                "type": "boolean",
+                "title": "已读"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "title": "时间"
+              }
+            }
           }
         }
       }
-    },
-    "tools": [
-      {
-        "name": "mark_all_read",
-        "description": "标记全部为已读",
-        "parameters": {},
-        "protocol": "http",
-        "method": "POST",
-        "url": "/api/notifications/mark-all-read",
-        "onSuccess": [
-          { "type": "message", "message": "已标记全部为已读", "level": "success" },
-          { "type": "reload" }
-        ]
-      }
-    ]
-  }
+    }
+  },
+  "_tools": [
+    {
+      "name": "mark_all_read",
+      "displayName": "mark_all_read",
+      "description": "标记全部为已读",
+      "protocol": "http",
+      "target": "/api/notifications/mark-all-read",
+      "method": "POST",
+      "url": "/api/notifications/mark-all-read",
+      "tools": []
+    }
+  ]
 }

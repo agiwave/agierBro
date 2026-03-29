@@ -1,5 +1,77 @@
 # AgierBro 更新日志
 
+## v6.1.0 (2026-03-29)
+
+### 统一分形路由规则
+
+**核心变更：**
+- 路由规则统一为：`/xxx/yyy/zzz → /api/xxx/yyy/zzz.json`
+- 删除了不一致的 `/index.json` 后缀规则
+
+**改动：**
+- `services/dataSourceMapper.ts` - 简化为统一映射规则
+- `router/index.ts` - 简化为通用路由 `/:pathMatch(.*)*`
+- `services/api.ts` - 统一 `fetchPageData(path)` 函数
+- `views/Entry.vue` - 简化加载逻辑，移除 `isActionPath()` 判断
+
+**文件结构调整：**
+- `users/index.json` → `users.json`
+- `users/user-001/index.json` → `users/user-001.json`
+- `orders/order-001/index.json` → `orders/order-001.json`
+
+**优势：**
+- 规则统一，易于理解和记忆
+- 完美的分形结构，支持任意层级
+- Server 端路由配置更简单
+
+**文档：**
+- `docs/ROUTING_REFACTOR.md` - 路由重构详细说明
+
+---
+
+## v6.0.0 (2026-03-29)
+
+### 纯工具描述架构 (in/out)
+
+**核心理念：** 所有接口返回的都是工具的 Schema 描述
+
+**架构变更：**
+- `_schema.in` - 输入参数描述（调用工具需要什么）
+- `_schema.out` - 输出描述（工具返回什么）
+- `in` 为空 → 数据展示（view 模式）
+- `in` 有定义 → 表单输入（edit 模式）
+
+**类型定义更新：**
+- 新增 `ToolDescriptor` 接口
+- 新增 `PageDescriptor` 接口
+- 保留 `Tool` 类型（向后兼容）
+
+**API 服务更新：**
+- `extractInSchema()` - 提取输入 Schema
+- `extractOutSchema()` - 提取输出 Schema
+- `needsInput()` - 判断是否需要输入
+- `isDataTool()` - 判断是否是数据工具
+
+**前端判断逻辑：**
+```typescript
+if (needsInput(result)) {
+  mode.value = 'edit'   // 需要输入，呈现表单
+} else {
+  mode.value = 'view'   // 无需输入，展示数据
+}
+```
+
+**示例数据更新：**
+- 所有 40 个示例文件转换为 v6.0 格式
+- 31 个数据展示文件（in 为空）
+- 9 个表单输入文件（in 有定义）
+
+**文档：**
+- `docs/ARCHITECTURE_V6.md` - v6.0 架构详解
+- `docs/VALIDATION_REPORT.md` - 示例数据验证报告
+
+---
+
 ## v0.9.0 (2026-03-25)
 
 ### 企业级功能完善

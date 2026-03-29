@@ -52,51 +52,73 @@
     "size": 10
   },
   "_schema": {
-    "type": "object",
-    "title": "论文管理",
-    "description": "管理所有投稿论文",
-    "properties": {
-      "items": {
-        "type": "array",
-        "title": "论文列表",
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "论文管理",
+      "properties": {
         "items": {
-          "type": "object",
-          "_address": "/editor/papers/{id}.json",
-          "properties": {
-            "id": { "type": "string", "title": "编号" },
-            "title": { "type": "string", "title": "标题" },
-            "author": { "type": "string", "title": "作者" },
-            "author_email": { "type": "string", "title": "邮箱" },
-            "status": {
-              "type": "string",
-              "title": "状态",
-              "enum": [
-                { "value": "pending_review", "label": "待分配" },
-                { "value": "reviewing", "label": "评审中" },
-                { "value": "reviewed", "label": "已评审" }
-              ]
-            },
-            "submitted_at": { "type": "string", "title": "提交时间" },
-            "reviewer": { "type": "string", "title": "评审专家" }
+          "type": "array",
+          "title": "论文列表",
+          "items": {
+            "type": "object",
+            "_address": "/editor/papers/{id}.json",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "编号"
+              },
+              "title": {
+                "type": "string",
+                "title": "标题"
+              },
+              "author": {
+                "type": "string",
+                "title": "作者"
+              },
+              "author_email": {
+                "type": "string",
+                "title": "邮箱"
+              },
+              "status": {
+                "type": "string",
+                "title": "状态",
+                "enum": [
+                  {
+                    "value": "pending_review",
+                    "label": "待分配"
+                  },
+                  {
+                    "value": "reviewing",
+                    "label": "评审中"
+                  },
+                  {
+                    "value": "reviewed",
+                    "label": "已评审"
+                  }
+                ]
+              },
+              "submitted_at": {
+                "type": "string",
+                "title": "提交时间"
+              },
+              "reviewer": {
+                "type": "string",
+                "title": "评审专家"
+              }
+            }
           }
         }
       }
-    },
-    "tools": [
-      {
-        "type": "function",
-        "function": {
-          "name": "create_paper",
-          "description": "创建新论文",
-          "parameters": {}
-        },
-        "execution": {
-          "protocol": "navigate",
-          "navigate": {
-            "target": "/editor/papers/new"
-          }
-        }
-      }
-    ]
-  }
+    }
+  },
+  "_tools": [
+    {
+      "name": "",
+      "displayName": "",
+      "description": "",
+      "protocol": "navigate",
+      "target": ""
+    }
+  ]
 }

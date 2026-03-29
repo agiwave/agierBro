@@ -5,76 +5,76 @@
   "confirmPassword": "",
   "agreeTerms": false,
   "_schema": {
-    "type": "object",
-    "title": "注册",
-    "description": "创建新账号开始使用系统",
-    "semantic": "content",
-    "properties": {
-      "username": {
-        "type": "string",
-        "title": "用户名",
-        "required": true,
-        "placeholder": "请输入用户名",
-        "minLength": 3,
-        "maxLength": 20,
-        "description": "3-20 个字符"
-      },
-      "email": {
-        "type": "string",
-        "title": "邮箱",
-        "format": "email",
-        "required": true,
-        "placeholder": "请输入邮箱地址",
-        "description": "用于找回密码和接收通知"
-      },
-      "password": {
-        "type": "string",
-        "title": "密码",
-        "format": "password",
-        "required": true,
-        "placeholder": "请输入密码",
-        "minLength": 6,
-        "description": "至少 6 个字符"
-      },
-      "confirmPassword": {
-        "type": "string",
-        "title": "确认密码",
-        "format": "password",
-        "required": true,
-        "placeholder": "请再次输入密码"
-      },
-      "agreeTerms": {
-        "type": "boolean",
-        "title": "同意服务条款",
-        "required": true,
-        "default": false,
-        "description": "请阅读并同意《服务条款》和《隐私政策》"
+    "in": {
+      "type": "object",
+      "title": "注册",
+      "properties": {
+        "username": {
+          "type": "string",
+          "title": "用户名",
+          "required": true,
+          "placeholder": "请输入用户名",
+          "minLength": 3,
+          "maxLength": 20,
+          "description": "3-20 个字符"
+        },
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "format": "email",
+          "required": true,
+          "placeholder": "请输入邮箱地址",
+          "description": "用于找回密码和接收通知"
+        },
+        "password": {
+          "type": "string",
+          "title": "密码",
+          "format": "password",
+          "required": true,
+          "placeholder": "请输入密码",
+          "minLength": 6,
+          "description": "至少 6 个字符"
+        },
+        "confirmPassword": {
+          "type": "string",
+          "title": "确认密码",
+          "format": "password",
+          "required": true,
+          "placeholder": "请再次输入密码"
+        },
+        "agreeTerms": {
+          "type": "boolean",
+          "title": "同意服务条款",
+          "required": true,
+          "default": false,
+          "description": "请阅读并同意《服务条款》和《隐私政策》"
+        }
       }
     },
-    "tools": [
-      {
-        "name": "register",
-        "description": "注册账号",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "username": { "type": "string" },
-            "email": { "type": "string" },
-            "password": { "type": "string" }
-          },
-          "required": ["username", "email", "password"]
+    "out": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "title": "消息"
         },
-        "protocol": "http",
-        "method": "POST",
-        "url": "/api/auth/register",
-        "onSuccess": [
-          { "type": "message", "message": "注册成功，请登录", "level": "success" },
-          { "type": "navigate", "target": "/auth/login" }
-        ],
-        "onError": [
-          { "type": "message", "message": "注册失败，请重试", "level": "error" }
-        ]
+        "id": {
+          "type": "string",
+          "title": "ID"
+        }
       }
-    ]
-  }
+    }
+  },
+  "_tools": [
+    {
+      "name": "register",
+      "displayName": "register",
+      "description": "注册账号",
+      "protocol": "http",
+      "target": "/api/auth/register",
+      "method": "POST",
+      "url": "/api/auth/register",
+      "tools": []
+    }
+  ]
 }

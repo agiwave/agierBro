@@ -3,8 +3,11 @@
   "items": [
     {
       "_schema": {
-        "type": "object",
-        "semantic": "nav"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "nav"
+        }
       },
       "icon": "📖",
       "title": "AgierBro",
@@ -16,8 +19,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "content"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "content"
+        }
       },
       "icon": "🚀",
       "title": "关于 AgierBro",
@@ -30,8 +36,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "features"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "features"
+        }
       },
       "title": "核心设计理念",
       "items": [
@@ -59,8 +68,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "content"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "content"
+        }
       },
       "icon": "🏗️",
       "title": "架构设计",
@@ -74,8 +86,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "cta"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "cta"
+        }
       },
       "title": "开始使用",
       "description": "立即体验数据驱动的 UI 开发方式",
@@ -86,8 +101,11 @@
     },
     {
       "_schema": {
-        "type": "object",
-        "semantic": "footer"
+        "in": {},
+        "out": {
+          "type": "object",
+          "semantic": "footer"
+        }
       },
       "text": "© 2026 AgierBro. MIT License.",
       "links": [
@@ -97,13 +115,16 @@
     }
   ],
   "_schema": {
-    "type": "object",
-    "title": "关于",
-    "properties": {
-      "title": { "type": "string", "title": "标题" },
-      "items": {
-        "type": "array",
-        "title": "页面区块"
+    "in": {},
+    "out": {
+      "type": "object",
+      "title": "关于",
+      "properties": {
+        "title": { "type": "string", "title": "标题" },
+        "items": {
+          "type": "array",
+          "title": "页面区块"
+        }
       }
     }
   }
